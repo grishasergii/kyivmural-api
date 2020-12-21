@@ -1,0 +1,22 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Kyivmural API v0.1.0 - API
+
+Parameters:
+  Branch:
+    Description: branch name
+    Type: String
+
+Resources:
+  ApiGateway:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Description: !Sub "Kyivmural API Gateway - ${Branch}"
+      EndpointConfiguration:
+        Types:
+          - PRIVATE
+      Body:
+        Fn::Transform:
+          Name: AWS::Include
+          Parameters:
+            Location: ./api-specification.yml

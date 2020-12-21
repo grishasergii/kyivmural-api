@@ -1,0 +1,17 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Kyivmural API v0.1.0
+
+Parameters:
+  Branch:
+    Description: branch name
+    Type: String
+
+Resources:
+  ApiStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://kyivmural-cfn-templates.s3.eu-central-1.amazonaws.com/kyivmural-api/${Branch}/api.cfn"
+      TimeoutInMinutes: 10
+      Parameters:
+        Branch: !Ref Branch
