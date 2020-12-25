@@ -8,3 +8,11 @@ jobs:
       - uses: scottbrenner/cfn-lint-action@master
         with:
           args: templates/*.cfn
+  
+  yaml-linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkour@v2
+      - uses: ibiqlik/action-yamllint@v3.0.0
+        with:
+          file_or_dir: templates/
