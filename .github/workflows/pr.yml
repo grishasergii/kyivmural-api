@@ -20,7 +20,7 @@ jobs:
   openapi-linter:  
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkour@v2
+      - uses: actions/checkout@v2
       - uses: vaibhav-jain/spectral-action@v2.6.1
         with:
           file_path: templates/api-specification.yml
