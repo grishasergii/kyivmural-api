@@ -1,8 +1,10 @@
-import click
 import os
-from ci.external_cmd import ExternalCmd
-from pathlib import Path
 import shutil
+from pathlib import Path
+
+import click
+
+from ci.external_cmd import ExternalCmd
 
 
 @click.command()

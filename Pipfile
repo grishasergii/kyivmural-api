@@ -10,7 +10,8 @@ flask = "*"
 pytest = "*"
 cfn-lint = "*"
 click = "*"
-black = "*"
+black = {version = "*", pre="true"}
+isort = {version = "*", pre="true"}
 
 [requires]
 python_version = "3.9"
