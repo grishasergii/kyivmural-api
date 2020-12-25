@@ -12,6 +12,10 @@ cfn-lint = "*"
 click = "*"
 black = {version = "*", pre="true"}
 isort = {version = "*", pre="true"}
+bump2version = "*"
 
 [requires]
 python_version = "3.9"
+
+[pipenv]
+allow_prereleases = true
