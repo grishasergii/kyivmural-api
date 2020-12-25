@@ -4,8 +4,6 @@ info:
   title: Kyivmural API
   description: Kyivmural API
   version: 0.1.0
-schemes:
-  - https
 consumes:
   - application/json
 produces:
