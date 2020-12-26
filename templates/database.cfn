@@ -1,0 +1,50 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Kyivmural API v0.1.0 - Database
+
+Parameters:
+  Branch:
+    Description: branch name
+    Type: String
+
+Resources:
+  MuralsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "Kyivmural-Murals-${Branch}"
+      AttributeDefinitions:
+        - AttributeName: MuralId
+          AttributeType: S
+        - AttributeName: ArtistNameEn
+          AttributeType: S
+      KeySchema:
+        - AttributeName: MuralId
+          KeyType: HASH
+        - AttributeName: ArtistNameEn
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: ArtistNameEn-index
+          KeySchema:
+            - AttributeName: ArtistNameEn
+              KeyType: HASH
+            - AttributeName: MuralId
+              KeyType: RANGE
+          Projection:
+            ProjectionType: KEYS_ONLY
+      BillingMode: PAY_PER_REQUEST
+
+  ArtistsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "Kyivmural-Artists-${Branch}"
+      AttributeDefinitions:
+        - AttributeName: ArtistNameEn
+          AttributeType: S
+        - AttributeName: ArtistNameUk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: ArtistNameEn
+          KeyType: HASH
+        - AttributeName: ArtistNameUk
+          KeyType: RANGE
+      BillingMode: PAY_PER_REQUEST

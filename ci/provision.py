@@ -10,6 +10,7 @@ def _stack_exists(stack_name):
         "CREATE_COMPLETE "
         "UPDATE_IN_PROGRESS "
         "UPDATE_COMPLETE_CLEANUP_IN_PROGRESS "
+        "ROLLBACK_COMPLETE "
     )
     stacks = result.get("StackSummaries", [])
     for stack in stacks:

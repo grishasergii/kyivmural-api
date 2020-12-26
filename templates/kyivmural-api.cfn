@@ -15,3 +15,11 @@ Resources:
       TimeoutInMinutes: 10
       Parameters:
         Branch: !Ref Branch
+
+  DatabaseStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://kyivmural-cfn-templates.s3.eu-central-1.amazonaws.com/kyivmural-api/${Branch}/database.cfn"
+      TimeoutInMinutes: 10
+      Parameters:
+        Branch: !Ref Branch
