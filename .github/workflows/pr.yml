@@ -38,6 +38,8 @@ jobs:
     #   - cloudformation-linter
     #   - yaml-linter
     runs-on: ubuntu-latest
+    env:
+      PR_NUMBER: ${{ github.event.number }}
     steps:
       - uses: actions/checkout@v2
       - uses: aws-actions/configure-aws-credentials@v1
@@ -52,13 +54,9 @@ jobs:
         run: python -m pip install --upgrade pip wheel pipenv
       - name: Install dependencies
         run: pipenv sync
+      - name: Add current working dir to PATH
+        run: echo "home/runner/work/kyivmural-api" >> $GITHUB_PATH
       - name: Package cloudformation template
-        run: pipenv run python ci/package.py --layer-name kyivmural-api --path templates/ --main-template kyivmural-api.cfn --branch dev-$PR_NUMBER --artifacts-bucket ${{ secrets.AWS_KYIVMURAL_ARTIFACT_BUCKET }} --cfn-bucket ${{ secrets.AWS_KYIVMURAL_CFN_BUCKET }}
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-          PYTHONPATH: ${PYTHONPATH}:src
+        run: pipenv run python ./ci/package.py --layer-name kyivmural-api --path templates/ --main-template kyivmural-api.cfn --branch dev-$PR_NUMBER --artifacts-bucket ${{ secrets.AWS_KYIVMURAL_ARTIFACT_BUCKET }} --cfn-bucket ${{ secrets.AWS_KYIVMURAL_CFN_BUCKET }}
       - name: Provision dev stack
-        run: pipenv run python ci/provision.py --template-file templates/kyivmural-api.cfn --layer-name kyivmural-api --branch dev-$PR_NUMBER
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-          PYTHONPATH: ${PYTHONPATH}:src
+        run: pipenv run python ./ci/provision.py --template-file templates/kyivmural-api.cfn --layer-name kyivmural-api --branch dev-$PR_NUMBER
