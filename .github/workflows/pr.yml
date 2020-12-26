@@ -59,7 +59,7 @@ jobs:
         run: pipenv run python ci/package.py --layer-name kyivmural-api --path templates/ --main-template kyivmural-api.cfn --branch dev-$PR_NUMBER --artifacts-bucket $ARTIFACTS_BUCKET --cfn-bucket $CFN_BUCKET
         env:
           PR_NUMBER: ${{ github.event.number }}
-          ARTIFACTS_BUCKET: ${{ secrets.AWS_KYIVMURAL_ARTIFACT_BUCKET }}
+          ARTIFACTS_BUCKET: ${{ secrets.AWS_KYIVMURAL_ARTIFACTS_BUCKET }}
           CFN_BUCKET: ${{ secrets.AWS_KYIVMURAL_CFN_BUCKET }}
       - name: Provision dev stack
         run: pipenv run python ci/provision.py --template-file templates/kyivmural-api.cfn --layer-name kyivmural-api --branch dev-$PR_NUMBER
