@@ -4,12 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-flask = "*"
+click = "*"
 
 [dev-packages]
 pytest = "*"
 cfn-lint = "*"
-click = "*"
 black = {version = "*", pre="true"}
 isort = {version = "*", pre="true"}
 bump2version = "*"
