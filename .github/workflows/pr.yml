@@ -15,7 +15,7 @@ jobs:
           args: templates/*.cfn
       - uses: minchao/cfn-nag-action@master
         with:
-          args: --input-path templates/*.cfn
+          args: -f templates/*.cfn
 
   yaml-linter:
     name: Lint YAML
