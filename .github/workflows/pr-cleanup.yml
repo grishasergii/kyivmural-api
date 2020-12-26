@@ -1,0 +1,21 @@
+name: PR cleanup
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  delete-pr-stack:
+    name: Delete PR stack
+    runs-on: ubuntu-latest
+    env:
+      STACK_NAME: kyivmural-api-pr-${{ github.event.number }}
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_KYIVMURAL_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_KYIVMURAL_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_KYIVMURAL_REGION }}
+      - name: Initiate pr stack delete
+        run: aws cloudformation delete-stack --stack-name $STACK_NAME
+      - name: Wait for the delete confirmation
+        run: aws cloudformation wait stack-delete-complete --stack-name $STACK_NAME
