@@ -1,4 +1,4 @@
-name: Lint cloudformation templates
+name: PR pipeline
 on:
   pull_request:
     branches:
@@ -6,6 +6,7 @@ on:
 
 jobs:
   cloudformation-linter:
+    name: Lint Cloudformation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,6 +15,7 @@ jobs:
           args: templates/*.cfn
   
   yaml-linter:
+    name: Lint YAML
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,9 +24,35 @@ jobs:
           file_or_dir: templates/
   
   openapi-linter:  
+    name: Lint OpenaAPI
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: vaibhav-jain/spectral-action@v2.6.1
         with:
           file_path: templates/api-specification.yml
+  
+  provision-pr-stack:
+    name: Provision PR stack
+    needs:
+      - cloudformation-linter
+      - yaml-linter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_KYIVMURAL_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_KYIVMURAL_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_KYIVMURAL_REGION }}
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Package cloudformation template
+        run: python ci/package.py --layer-name kyivmural-api --path templates/ --main-template kyivmural-api.cfn --branch dev-$PR_NUMBER --artifacts-bucket ${{ secrets.AWS_KYIVMURAL_ARTIFACT_BUCKET }} --cfn-bucket ${{ secrets.AWS_KYIVMURAL_CFN_BUCKET }}
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+      - name: Provision dev stack
+        run: python ci/provision.py --template-file templates/kyivmural-api.cfn --layer-name kyivmural-api --branch dev-$PR_NUMBER
+        env:
+          PR_NUMBER: ${{ github.event.number }}
