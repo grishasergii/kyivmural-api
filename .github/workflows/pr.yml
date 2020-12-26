@@ -13,7 +13,10 @@ jobs:
       - uses: scottbrenner/cfn-lint-action@master
         with:
           args: templates/*.cfn
-  
+      - uses: minchao/cfn-nag-action@master
+        with:
+          args: --input-path templates/*.cfn
+
   yaml-linter:
     name: Lint YAML
     runs-on: ubuntu-latest
