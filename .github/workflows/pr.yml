@@ -56,7 +56,9 @@ jobs:
         run: pipenv run python ci/package.py --layer-name kyivmural-api --path templates/ --main-template kyivmural-api.cfn --branch dev-$PR_NUMBER --artifacts-bucket ${{ secrets.AWS_KYIVMURAL_ARTIFACT_BUCKET }} --cfn-bucket ${{ secrets.AWS_KYIVMURAL_CFN_BUCKET }}
         env:
           PR_NUMBER: ${{ github.event.number }}
+          PYTHONPATH: ${PYTHONPATH}:src
       - name: Provision dev stack
         run: pipenv run python ci/provision.py --template-file templates/kyivmural-api.cfn --layer-name kyivmural-api --branch dev-$PR_NUMBER
         env:
           PR_NUMBER: ${{ github.event.number }}
+          PYTHONPATH: ${PYTHONPATH}:src
