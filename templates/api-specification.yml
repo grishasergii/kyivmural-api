@@ -1,15 +1,9 @@
 ---
-openapi: 3.0.0
+openapi: 3.0.1
 info:
   title: Kyivmural API
   description: Kyivmural API
   version: 0.1.0
-schemes:
-  - https
-consumes:
-  - application/json
-produces:
-  - application/json
 
 paths:
   /murals:
@@ -28,9 +22,10 @@ paths:
       security:
         - AwsIamAuthorizer: []
 
-securityDefinitions:
-  AwsIamAuthorizer:
-    type: apiKey
-    name: Authorization
-    in: header
-    x-amazon-apigateway-authtype: awsSigv4
+components:
+  securitySchemes:
+    AwsIamAuthorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: awsSigv4
