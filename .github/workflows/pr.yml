@@ -55,8 +55,8 @@ jobs:
       - name: Install dependencies
         run: pipenv sync
       - name: Add current working dir to PATH
-        run: echo "home/runner/work/kyivmural-api" >> $GITHUB_PATH
+        run: echo "home/runner/work/kyivmural-api/kyivmural-api" >> $GITHUB_PATH
       - name: Package cloudformation template
-        run: pipenv run python ./ci/package.py --layer-name kyivmural-api --path templates/ --main-template kyivmural-api.cfn --branch dev-$PR_NUMBER --artifacts-bucket ${{ secrets.AWS_KYIVMURAL_ARTIFACT_BUCKET }} --cfn-bucket ${{ secrets.AWS_KYIVMURAL_CFN_BUCKET }}
+        run: pipenv run python ci/package.py --layer-name kyivmural-api --path templates/ --main-template kyivmural-api.cfn --branch dev-$PR_NUMBER --artifacts-bucket ${{ secrets.AWS_KYIVMURAL_ARTIFACT_BUCKET }} --cfn-bucket ${{ secrets.AWS_KYIVMURAL_CFN_BUCKET }}
       - name: Provision dev stack
-        run: pipenv run python ./ci/provision.py --template-file templates/kyivmural-api.cfn --layer-name kyivmural-api --branch dev-$PR_NUMBER
+        run: pipenv run python ci/provision.py --template-file templates/kyivmural-api.cfn --layer-name kyivmural-api --branch dev-$PR_NUMBER
