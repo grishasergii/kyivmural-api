@@ -34,10 +34,10 @@ jobs:
   
   provision-pr-stack:
     name: Provision PR stack
-    #needs:
-    #  - cloudformation-linter
-    #  - yaml-linter
-    #  - openapi-linter
+    needs:
+      - cloudformation-linter
+      - yaml-linter
+      - openapi-linter
     runs-on: ubuntu-latest
     env:
       BRANCH: pr-${{ github.event.number }}
