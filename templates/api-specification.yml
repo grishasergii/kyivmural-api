@@ -28,9 +28,10 @@ paths:
       security:
         - AwsIamAuthorizer: []
 
-securityDefinitions:
-  AwsIamAuthorizer:
-    type: apiKey
-    name: Authorization
-    in: header
-    x-amazon-apigateway-authtype: awsSigv4
+components:
+  securitySchemes:
+    AwsIamAuthorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: awsSigv4
