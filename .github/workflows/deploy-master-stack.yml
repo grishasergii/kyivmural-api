@@ -1,0 +1,35 @@
+name: Deploy master stack
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  provision-master-stack:
+    name: Provision master stack
+    runs-on: ubuntu-latest
+    env:
+      BRANCH: master
+    steps:
+      - uses: actions/checkout@v2
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_KYIVMURAL_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_KYIVMURAL_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_KYIVMURAL_REGION }}
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install pipenv
+        run: python -m pip install --upgrade pip wheel pipenv
+      - name: Install dependencies
+        run: pipenv sync
+      - name: Add current working dir to PYTHONPATH
+        run: echo "PYTHONPATH=${PYTHONPATH}:src" >> $GITHUB_ENV
+      - name: Package cloudformation template
+        run: pipenv run python ci/package.py --layer-name kyivmural-api --path templates/ --main-template kyivmural-api.cfn --branch $BRANCH --artifacts-bucket $ARTIFACTS_BUCKET --cfn-bucket $CFN_BUCKET
+        env:
+          ARTIFACTS_BUCKET: ${{ secrets.AWS_KYIVMURAL_ARTIFACTS_BUCKET }}
+          CFN_BUCKET: ${{ secrets.AWS_KYIVMURAL_CFN_BUCKET }}
+      - name: Provision dev stack
+        run: pipenv run python ci/provision.py --template-file templates/kyivmural-api.cfn --layer-name kyivmural-api --branch $BRANCH
