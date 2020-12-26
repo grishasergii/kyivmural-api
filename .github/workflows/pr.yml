@@ -13,9 +13,10 @@ jobs:
       - uses: scottbrenner/cfn-lint-action@master
         with:
           args: templates/*.cfn
-      - uses: minchao/cfn-nag-action@master
+      - uses: stelligent/cfn_nag@master
         with:
-          args: -f templates/*.cfn
+          input_path: templates/*.cfn
+          extra_args: --fail-on-warnings
 
   yaml-linter:
     name: Lint YAML
