@@ -47,6 +47,53 @@ paths:
 
 
 components:
+  schemas:
+    Mural:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        artist_name_en:
+          type: string
+          nullable: true
+        thumbnail:
+          type: string
+          format: uri
+        photos:
+          type: array
+          items:
+            $ref: "#/components/schemas/MuralPhoto"
+        status:
+          type: string
+          description: Mural Status
+          enum:
+            - active
+            - removed
+        geo_position:
+          $ref: "#/components/schemas/GeoPosition"
+    GeoPosition:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: float
+        longitude:
+          type: number
+          format: float
+    MuralPhoto:
+      type: object
+      properties:
+        uri:
+          type: string
+          format: uri
+        author_name:
+          type: string
+          nullable: true
+        author_url:
+          type: string
+          nullable: true
+
   securitySchemes:
     AwsIamAuthorizer:
       type: apiKey
