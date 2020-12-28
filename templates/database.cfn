@@ -48,3 +48,7 @@ Resources:
         - AttributeName: ArtistNameUk
           KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
+
+Outputs:
+  MuralsTableName:
+    Value: !Ref MuralsTable

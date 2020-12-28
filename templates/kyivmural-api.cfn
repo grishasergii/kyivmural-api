@@ -23,3 +23,12 @@ Resources:
       TimeoutInMinutes: 10
       Parameters:
         Branch: !Ref Branch
+
+  BackendStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://kyivmural-cfn-templates.s3.eu-central-1.amazonaws.com/kyivmural-api/${Branch}/backend.cfn"
+      TimeoutInMinutes: 10
+      Parameters:
+        Branch: !Ref Branch
+        MualsTableName: !GetAtt.DatabaseStack.Outputs.MualsTableName
