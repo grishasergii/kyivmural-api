@@ -13,7 +13,7 @@ paths:
     get:
       summary: Returns a list of murals
       description: Returns a list of murals
-      opertaionId: getMural
+      operationId: getMural
       tags:
         - mural
       responses:
@@ -111,9 +111,9 @@ components:
     MuralStatus:
       type: string
       description: Mural Status
-        enum:
-          - active
-          - removed
+      enum:
+        - active
+        - removed
     MuralPhoto:
       type: object
       properties:
