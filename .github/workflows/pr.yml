@@ -14,6 +14,7 @@ jobs:
         with:
           python-root-list: functions
           extra-isort-options: --profile black
+          extra-pycodestyle-options: --max-line-length=100
 
   cloudformation-linter:
     name: Lint Cloudformation
