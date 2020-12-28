@@ -13,21 +13,21 @@ Resources:
     Properties:
       TableName: !Sub "Kyivmural-Murals-${Branch}"
       AttributeDefinitions:
-        - AttributeName: MuralId
+        - AttributeName: id
           AttributeType: S
-        - AttributeName: ArtistNameEn
+        - AttributeName: artist_name_en
           AttributeType: S
       KeySchema:
-        - AttributeName: MuralId
+        - AttributeName: id
           KeyType: HASH
-        - AttributeName: ArtistNameEn
+        - AttributeName: artist_name_en
           KeyType: RANGE
       GlobalSecondaryIndexes:
-        - IndexName: ArtistNameEn-index
+        - IndexName: artist_name_en-index
           KeySchema:
-            - AttributeName: ArtistNameEn
+            - AttributeName: artist_name_en
               KeyType: HASH
-            - AttributeName: MuralId
+            - AttributeName: id
               KeyType: RANGE
           Projection:
             ProjectionType: KEYS_ONLY
@@ -38,14 +38,14 @@ Resources:
     Properties:
       TableName: !Sub "Kyivmural-Artists-${Branch}"
       AttributeDefinitions:
-        - AttributeName: ArtistNameEn
+        - AttributeName: artist_name_en
           AttributeType: S
-        - AttributeName: ArtistNameUk
+        - AttributeName: artist_name_uk
           AttributeType: S
       KeySchema:
-        - AttributeName: ArtistNameEn
+        - AttributeName: artist_name_en
           KeyType: HASH
-        - AttributeName: ArtistNameUk
+        - AttributeName: artist_name_uk
           KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
 
