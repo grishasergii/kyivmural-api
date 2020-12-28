@@ -23,4 +23,5 @@ def lambda_handler(event, context):
         "mural_crud start with event: %s", json.dumps(event, indent=2, default=str)
     )
     logger.debug("context: %s", context.__dict__)
-    format_response(HTTPStatus.OK, {"message": "ok"})
+    result = format_response(HTTPStatus.OK, {"message": "ok"})
+    return result
