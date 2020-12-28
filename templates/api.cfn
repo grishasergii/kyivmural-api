@@ -29,5 +29,5 @@ Resources:
     Properties:
       Action: lambda:InvokeFunction
       FunctionName: !Ref LambdaMuralCRUDArn
-      Principal: apifateway.amazonaws.com
+      Principal: apigateway.amazonaws.com
       SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/*/*"
