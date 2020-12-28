@@ -32,15 +32,15 @@ paths:
               $ref: "#/components/schemas/Mural"
         required: true
       responses:
-        201:
+        "201":
           description: Successful operation
-        400:
+        "400":
           description: Bad request, invalid body
-        401:
+        "401":
           description: Bad request, authentication problem
-        409:
+        "409":
           description: Bad request, conflict
-        500:
+        "500":
           desription: Internal server error
       security:
         - AwsIamAuthorizer: []
