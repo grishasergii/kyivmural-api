@@ -17,8 +17,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: string
-                  format: uuid
+                  $ref: "#/components/schemas/MuralSlim"
       security:
         - AwsIamAuthorizer: []
 
@@ -48,6 +47,20 @@ paths:
 
 components:
   schemas:
+    MuralSlim:
+      type: object
+      description: Slim version of the Mural object
+      properties:
+        id:
+          type: string
+          format: uuid
+        thumbnail:
+          type: string
+          format: uri
+        geo_position:
+          $ref: "#/components/schemas/GeoPosition"
+        status:
+          $ref: "#/components/schemas/MuralStatus"
     Mural:
       type: object
       properties:
@@ -72,11 +85,7 @@ components:
             uk:
               $ref: "#/components/schemas/MuralDescription"
         status:
-          type: string
-          description: Mural Status
-          enum:
-            - active
-            - removed
+          $ref: "#/components/schemas/MuralStatus"
         geo_position:
           $ref: "#/components/schemas/GeoPosition"
     GeoPosition:
@@ -88,6 +97,12 @@ components:
         longitude:
           type: number
           format: float
+    MuralStatus:
+      type: string
+      description: Mural Status
+        enum:
+          - active
+          - removed
     MuralPhoto:
       type: object
       properties:
