@@ -3,7 +3,7 @@
 yaml-files:
   - "*.yaml"
   - "*.yml"
-  - ".yamllint"
+  - ".yamllint.yml"
   - "*.cfn"
 
 rules:
