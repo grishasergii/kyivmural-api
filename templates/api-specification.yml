@@ -64,6 +64,13 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/MuralPhoto"
+        description:
+          type: object
+          properties:
+            en:
+              $ref: "#/components/schemas/MuralDescription"
+            uk:
+              $ref: "#/components/schemas/MuralDescription"
         status:
           type: string
           description: Mural Status
@@ -93,7 +100,17 @@ components:
         author_url:
           type: string
           nullable: true
-
+    MuralDescription:
+      type: object
+      properties:
+        address:
+          type: string
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
   securitySchemes:
     AwsIamAuthorizer:
       type: apiKey
