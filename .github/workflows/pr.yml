@@ -15,22 +15,6 @@ jobs:
           python-root-list: functions
           extra-isort-options: --profile black
 
-  python-security:
-    name: Python security check - Bandit
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: Joel-hanson/bandit-report-artifacts@V1
-        with:
-          python_version: 3.8
-          project_path : functions/source
-      - name: Security check report artifacts
-        uses: actions/upload-artifact@v1
-        if: failure()
-        with:
-          name: Security report
-          path: output/security_report.txt
-
   cloudformation-linter:
     name: Lint Cloudformation
     runs-on: ubuntu-latest
@@ -69,7 +53,6 @@ jobs:
       - yaml-linter
       - openapi-linter
       - pyhon-linter
-      - python-security
     runs-on: ubuntu-latest
     env:
       BRANCH: pr-${{ github.event.number }}
