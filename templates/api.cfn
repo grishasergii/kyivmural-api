@@ -6,6 +6,9 @@ Parameters:
   Branch:
     Description: branch name
     Type: String
+  LambdaMuralCRUDArn:
+    Description: arn of the mural crud lambda
+    Type: String
 
 Resources:
   ApiGateway:
@@ -20,3 +23,11 @@ Resources:
           Name: AWS::Include
           Parameters:
             Location: ./api-specification.yml
+
+  LambdaMuralCRUDPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeAction
+      FunctionName: !Ref LambdaMuralCRUDArn
+      Principal: apifateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/*/*"

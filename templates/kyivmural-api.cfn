@@ -15,6 +15,7 @@ Resources:
       TimeoutInMinutes: 10
       Parameters:
         Branch: !Ref Branch
+        LambdaMuralCRUDArn: !GetAtt BackendStack.Outputs.LambdaMuralCRUDArn
 
   DatabaseStack:
     Type: AWS::CloudFormation::Stack

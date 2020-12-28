@@ -62,3 +62,7 @@ Resources:
         Variables:
           LOG_LEVEL: DEBUG
           MURALS_TABLE: !Ref MualsTableName
+
+Outputs:
+  LambdaMuralCRUDArn:
+    Value: !GetAtt LambdaMuralCRUD.Arn

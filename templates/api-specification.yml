@@ -27,6 +27,14 @@ paths:
                   $ref: "#/components/schemas/MuralSlim"
       security:
         - AwsIamAuthorizer: []
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations
+        httpMethod: POST
+        responses:
+          default:
+            statusCode: 200
 
     post:
       summary: Add a new mural
@@ -54,7 +62,14 @@ paths:
           description: Internal server error
       security:
         - AwsIamAuthorizer: []
-
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations
+        httpMethod: POST
+        responses:
+          default:
+            statusCode: 200
 
 components:
   schemas:
