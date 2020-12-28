@@ -5,7 +5,7 @@ on:
       - master
 
 jobs:
-  pyhon-lint:
+  pyhon-linter:
     name: Python Lint
     runs-on: ubuntu-latest
     steps:
@@ -52,6 +52,7 @@ jobs:
       - cloudformation-linter
       - yaml-linter
       - openapi-linter
+      - pyhon-linter
     runs-on: ubuntu-latest
     env:
       BRANCH: pr-${{ github.event.number }}
