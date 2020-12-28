@@ -41,7 +41,7 @@ paths:
         "409":
           description: Bad request, conflict
         "500":
-          desription: Internal server error
+          description: Internal server error
       security:
         - AwsIamAuthorizer: []
 
