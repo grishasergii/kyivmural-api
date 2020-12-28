@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Kyivmural API v0.1.0 - Backend
 
 Parameters:
-  MualsTableName:
+  MuralsTableName:
     Description: name of the Murals database table
     Type: String
 
@@ -44,7 +44,7 @@ Resources:
                   - dynamodb:BatchWriteItem
                   - dynamodb:PutItem
                   - dynamodb:UpdateItem
-                Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/MualsTableName"
+                Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/MuralsTableName"
 
   LambdaMuralCRUD:
     Type: AWS::Lambda::Function
@@ -58,7 +58,7 @@ Resources:
       Environment:
         Variables:
           LOG_LEVEL: DEBUG
-          MURALS_TABLE: !Ref MualsTableName
+          MURALS_TABLE: !Ref MuralsTableName
 
 Outputs:
   LambdaMuralCRUDArn:

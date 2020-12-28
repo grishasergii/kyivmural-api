@@ -31,4 +31,4 @@ Resources:
       TemplateURL: !Sub "https://kyivmural-cfn-templates.s3.eu-central-1.amazonaws.com/kyivmural-api/${Branch}/backend.cfn"
       TimeoutInMinutes: 10
       Parameters:
-        MualsTableName: !GetAtt DatabaseStack.Outputs.MualsTableName
+        MuralsTableName: !GetAtt DatabaseStack.Outputs.MuralsTableName
