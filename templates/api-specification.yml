@@ -4,11 +4,18 @@ info:
   title: Kyivmural API
   description: Kyivmural API
   version: 0.1.0
+tags:
+  - name: mural
+    description: Operations about murals
 
 paths:
   /murals:
     get:
       summary: Returns a list of murals
+      description: Returns a list of murals
+      opertaionId: getMural
+      tags:
+        - mural
       responses:
         "200":
           description: A JSON array of mural ids
@@ -23,6 +30,10 @@ paths:
 
     post:
       summary: Add a new mural
+      description: Add a new mural
+      operationId: addMural
+      tags:
+        - mural
       requestBody:
         description: Mural objects to be added
         content:
