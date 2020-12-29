@@ -4,7 +4,7 @@ import logging
 import os
 from http import HTTPStatus
 import boto3
-import botocore.errorfactory
+
 
 logger = logging.getLogger()
 logger.setLevel(os.environ.get("LOG_LEVEL", logging.INFO))
@@ -20,6 +20,7 @@ def format_response(status_code, body=None):
 
 
 def add_mural(data, murals_table):
+    """Adds a mural item if it does not exist"""
     data["artist_name_en"] = data.get("artist_name_en", "unknown")
     try:
         response = murals_table.put_item(

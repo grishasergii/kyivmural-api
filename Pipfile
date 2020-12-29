@@ -14,6 +14,7 @@ black = {version = "*", pre="true"}
 isort = {version = "*", pre="true"}
 bump2version = "*"
 moto = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.9"

@@ -15,6 +15,28 @@ jobs:
           python-root-list: functions
           extra-isort-options: --profile black
 
+  python-unit-tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+         with:
+           python-version: 3.8
+      - name: Install pipenv
+        run: python -m pip install --upgrade pip wheel pipenv
+      - name: Install dependencies
+        run: pipenv sync --dev
+      - name: Add current working dir to PYTHONPATH
+        run: echo "PYTHONPATH=${PYTHONPATH}:src" >> $GITHUB_ENV
+      - name: Run unit tests
+        run: pipenv run pytest functions/tests/ --cov-report=html --cov=functions/ --cov-fail-under=60
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v2
+          with:
+            name: Coverage report
+            path: htmlcov/
+
   cloudformation-linter:
     name: Lint Cloudformation
     runs-on: ubuntu-latest
@@ -53,6 +75,7 @@ jobs:
       - yaml-linter
       - openapi-linter
       - pyhon-linter
+      - python-unit-tests
     runs-on: ubuntu-latest
     env:
       BRANCH: pr-${{ github.event.number }}
