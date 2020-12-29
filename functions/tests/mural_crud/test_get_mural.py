@@ -73,14 +73,14 @@ def test_get_all_murals_when_table_has_murals_result_contains_only_specified_fie
         "attribute-2": "attribute-2",
         "geo_position": {"latitude": "1", "longitude": "1"},
         "thumbnail": "dickpic",
-        "status": "active",
+        "mural_status": "active",
     }
     expected = {
         "id": "test-1",
         "artist_name_en": "artist-1",
         "geo_position": {"latitude": "1", "longitude": "1"},
         "thumbnail": "dickpic",
-        "status": "active",
+        "mural_status": "active",
     }
     murals_table.put_item(Item=item)
 

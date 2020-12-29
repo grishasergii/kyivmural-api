@@ -229,7 +229,7 @@ components:
           format: uri
         geo_position:
           $ref: "#/components/schemas/GeoPosition"
-        status:
+        mural_status:
           $ref: "#/components/schemas/MuralStatus"
     Mural:
       type: object
@@ -254,7 +254,7 @@ components:
               $ref: "#/components/schemas/MuralDescription"
             uk:
               $ref: "#/components/schemas/MuralDescription"
-        status:
+        mural_status:
           $ref: "#/components/schemas/MuralStatus"
         geo_position:
           $ref: "#/components/schemas/GeoPosition"

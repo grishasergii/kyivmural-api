@@ -70,7 +70,7 @@ def get_mural(mural_id, artist_name_en, murals_table):
 def get_all_murals(murals_table):
     """Returns all murals"""
     response = murals_table.scan(
-        ProjectionExpression="id,artist_name_en,geo_position,thumbnail,status"
+        ProjectionExpression="id,artist_name_en,geo_position,thumbnail,mural_status"
     )
     items = response.get("Items", [])
     return HTTPStatus.OK, items
