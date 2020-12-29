@@ -31,7 +31,7 @@ paths:
         type: AWS
         httpMethod: POST
         uri:
-          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations"
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations
         payloadFormatVersion: "2.0"
 
     post:
@@ -64,7 +64,7 @@ paths:
         type: AWS
         httpMethod: POST
         uri:
-          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations"
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations
         payloadFormatVersion: "2.0"
 
   /murals/{muralId}/{artistNameEn}:
@@ -109,7 +109,7 @@ paths:
         type: AWS
         httpMethod: POST
         uri:
-          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations"
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations
         payloadFormatVersion: "2.0"
     put:
       summary: Update an existing mural
@@ -155,7 +155,7 @@ paths:
         type: AWS
         httpMethod: POST
         uri:
-          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations"
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations
         payloadFormatVersion: "2.0"
     delete:
       summary: Deletes an existing mural
@@ -194,7 +194,7 @@ paths:
         type: AWS
         httpMethod: POST
         uri:
-          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations"
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations
         payloadFormatVersion: "2.0"
 
 components:
