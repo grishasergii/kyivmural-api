@@ -14,7 +14,6 @@ Resources:
   HTTPApi:
     Type: AWS::ApiGatewayV2::Api
     Properties:
-      Description: !Sub "Kyivmural API Gateway - ${Branch}"
       Body:
         Fn::Transform:
           Name: AWS::Include
