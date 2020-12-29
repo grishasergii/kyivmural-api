@@ -14,11 +14,7 @@ def aws_credentials():
     os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
     os.environ["AWS_SECURITY_TOKEN"] = "testing"
     os.environ["AWS_SESSION_TOKEN"] = "testing"
-
-
-@pytest.fixture()
-def aws_region():
-    return "eu-central-1"
+    os.environ["AWS_DEFAULT_REGION"] = "eu-central-1"
 
 
 @pytest.fixture()
@@ -27,15 +23,15 @@ def fake_environment(monkeypatch):
 
 
 @pytest.fixture()
-def dynamodb_client(aws_credentials, aws_region):
+def dynamodb_client(aws_credentials):
     with mock_dynamodb2():
-        yield boto3.client("dynamodb", region_name=aws_region)
+        yield boto3.client("dynamodb")
 
 
 @pytest.fixture()
-def dynamodb_resource(aws_credentials, aws_region):
+def dynamodb_resource(aws_credentials):
     with mock_dynamodb2():
-        yield boto3.resource("dynamodb", region_name=aws_region)
+        yield boto3.resource("dynamodb")
 
 
 @pytest.fixture()
