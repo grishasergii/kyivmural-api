@@ -62,5 +62,10 @@ def lambda_handler(event, context):
         mural_data = json.loads(event["body"])
         response_code, response_body = add_mural(mural_data, murals_table)
 
+    if http_method == "GET":
+        mural_id = event["pathParameters"]["muralId"]
+        artist_name_en = event["pathParameters"]["artistNameEn"]
+        response_code, response_body = get_mural(mural_id, artist_name_en, murals_table)
+
     result = format_response(response_code, response_body)
     return result
