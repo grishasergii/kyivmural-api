@@ -32,6 +32,11 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/*/*"
 
+  ApiGatewayAccessLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/kyivmural/api-gateway/${Branch}/kyivmural-api-access-logs"
+
   Stage:
     Type: AWS::ApiGatewayV2::Stage
     Properties:
@@ -39,3 +44,6 @@ Resources:
       Description: !Sub "Kyivmural API - ${Branch}"
       ApiId: !Ref ApiGateway
       AutoDeploy: true
+      AccessLogSettings:
+        DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
+        Format: '{ "requestId":"$context.requestId", "ip": "$context.identity.sourceIp", "caller":"$context.identity.caller", "user":"$context.identity.user","requestTime":"$context.requestTime", "httpMethod":"$context.httpMethod","resourcePath":"$context.resourcePath", "status":"$context.status","protocol":"$context.protocol", "responseLength":"$context.responseLength" }'
