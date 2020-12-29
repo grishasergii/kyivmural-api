@@ -84,7 +84,7 @@ def lambda_handler(event, context):
     logger.debug("context: %s", context.__dict__)
 
     try:
-        http_method = event["requestContext"]["http"]["method"]
+        http_method = event["requestContext"]["httpMethod"]
     except KeyError:
         return format_response(
             HTTPStatus.BAD_REQUEST, {"message": "http_method not found"}
