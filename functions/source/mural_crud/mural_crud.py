@@ -32,6 +32,29 @@ def add_mural(data, murals_table):
     return HTTPStatus.CREATED, response
 
 
+def delete_mural(mural_id, artist_name_en, murals_table):
+    """Removes an existing mural"""
+    try:
+        murals_table.delete_item(
+            Key={"id": mural_id, "artist_name_en": artist_name_en},
+            ConditionExpression="attribute_exists(id) AND attribute_exists(artist_name_en)"
+        )
+    except murals_table.meta.client.exceptions.ConditionalCheckFailedException:
+        return HTTPStatus.NOT_FOUND, {"message": "mural not found"}
+    return HTTPStatus.OK, {"message": "ok"}
+
+
+def update_mural(data, mural_id, artist_name_en, murals_table):
+    """Updates an existing mural"""
+    response_status, _ = delete_mural(mural_id, artist_name_en, murals_table)
+    if response_status == HTTPStatus.NOT_FOUND:
+        return HTTPStatus.NOT_FOUND, {"message": "mural not found"}
+    response_status, _ = add_mural(data, murals_table)
+    if response_status == HTTPStatus.CONFLICT:
+        return HTTPStatus.INTERNAL_SERVER_ERROR, {"message": "something has just happened that should have never happened"}
+    return HTTPStatus.NO_CONTENT, {"message": "ok"}
+
+
 def get_mural(mural_id, artist_name_en, murals_table):
     """Returns a mural item by its id and artist name"""
     response = murals_table.get_item(
@@ -80,6 +103,21 @@ def lambda_handler(event, context):
             response_code, response_body = get_mural(
                 mural_id, artist_name_en, murals_table
             )
+
+    if http_method == "PUT":
+        mural_id = event["pathParameters"]["muralId"]
+        artist_name_en = event["pathParameters"]["artistNameEn"]
+        mural_data = json.loads(event["body"])
+        response_code, response_body = update_mural(
+            mural_data, mural_id, artist_name_en, murals_table
+        )
+
+    if http_method == "DELETE":
+        mural_id = event["pathParameters"]["muralId"]
+        artist_name_en = event["pathParameters"]["artistNameEn"]
+        response_code, response_body = delete_mural(
+            mural_id, artist_name_en, murals_table
+        )
 
     result = format_response(response_code, response_body)
     return result
