@@ -13,11 +13,11 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: 3.9
-          - name: Install pipenv
-            run: python -m pip install --upgrade pip wheel pipenv
-          - name: Install dependencies
-            run: pipenv sync --dev
-          - name: Add current working dir to PYTHONPATH
+      - name: Install pipenv
+        run: python -m pip install --upgrade pip wheel pipenv
+      - name: Install dependencies
+        run: pipenv sync --dev
+      - name: Add current working dir to PYTHONPATH
       - name: Pylint
         run: pipenv run pylint functions/source
       - name: Pycodestyle
