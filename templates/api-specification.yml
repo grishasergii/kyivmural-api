@@ -33,7 +33,7 @@ paths:
         credentials:
           Fn::GetAtt: RestApiArtistsIntegrationRole.Arn
         uri:
-          Fn::Sub: "${ArtistsTableArn}/Scan"
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:dynamodb:action/Scan"
         responses:
           default:
             statusCode: "200"
