@@ -29,13 +29,13 @@ def fake_environment(monkeypatch):
 @pytest.fixture()
 def dynamodb_client(aws_credentials, aws_region):
     with mock_dynamodb2():
-        yield boto3.client("dynamodb")
+        yield boto3.client("dynamodb", region_name=aws_region)
 
 
 @pytest.fixture()
 def dynamodb_resource(aws_credentials, aws_region):
     with mock_dynamodb2():
-        yield boto3.resource("dynamodb")
+        yield boto3.resource("dynamodb", region_name=aws_region)
 
 
 @pytest.fixture()
