@@ -7,18 +7,39 @@ info:
 tags:
   - name: mural
     description: Operations about murals
+  - name: artist
+    description: Operations about artists
 
 paths:
+  /artist:
+    get:
+      summary: Returns a list of artists
+      description: Returns a list of artists
+      operationId: getArtists
+      tags:
+        - artist
+      responses:
+        "200":
+          description: An array of artists
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Artist"
+      security:
+        - AwsIamAuthorizer: []
+
   /murals:
     get:
       summary: Returns a list of murals
       description: Returns a list of murals
-      operationId: getMural
+      operationId: getMurals
       tags:
         - mural
       responses:
         "200":
-          description: A JSON array of mural ids
+          description: An array of murals
           content:
             application/json:
               schema:
@@ -294,6 +315,26 @@ components:
           type: string
           nullable: true
         description:
+          type: string
+          nullable: true
+    Artist:
+      type: object
+      properties:
+        artist_name_en:
+          type: string
+        artist_name_uk:
+          type: string
+        nickname:
+          type: string
+          nullable: true
+        webpage_url:
+          type: string
+          format: uri
+          nullable: true
+        about_en:
+          type: string
+          nullable: true
+        about_uk:
           type: string
           nullable: true
   securitySchemes:
