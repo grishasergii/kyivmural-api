@@ -97,8 +97,12 @@ def lambda_handler(event, context):
         response_code, response_body = add_mural(mural_data, murals_table)
 
     if http_method == "GET":
-        mural_id = event.get("pathParameters", {}).get("muralId")
-        artist_name_en = event.get("pathParameters", {}).get("artistNameEn")
+        try:
+            mural_id = event["pathParameters"]["muralId"]
+            artist_name_en = event["pathParameters"]["artistNameEn"]
+        except (TypeError, KeyError):
+            mural_id = None
+            artist_name_en = None
         if mural_id is None and artist_name_en is None:
             response_code, response_body = get_all_murals(murals_table)
         else:

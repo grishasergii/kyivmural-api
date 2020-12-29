@@ -56,6 +56,7 @@ def test_get_all_murals_when_empty_table_returns_empty_list(
 ):
     event = {
         "requestContext": {"httpMethod": "GET"},
+        "pathParameters": None
     }
 
     context = Mock()
