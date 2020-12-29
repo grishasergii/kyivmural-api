@@ -18,6 +18,7 @@ jobs:
       - name: Install dependencies
         run: pipenv sync --dev
       - name: Add current working dir to PYTHONPATH
+        run: echo "PYTHONPATH=${PYTHONPATH}:src" >> $GITHUB_ENV
       - name: Pylint
         run: pipenv run pylint functions/source
       - name: Pycodestyle
