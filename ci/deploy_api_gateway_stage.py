@@ -8,9 +8,11 @@ from ci.external_cmd import ExternalCmd
 @click.option("--stage-name", help="Name of the api stage")
 def deploy(stack_name, stage_name):
     click.echo(f"Fetching REST API id from {stack_name} stack...")
-    stack_description = ExternalCmd.run_and_parse_json(
+    stack_descriptions = ExternalCmd.run_and_parse_json(
         f"aws cloudformation describe-stacks --stack-name {stack_name}"
     )
+    assert len(stack_descriptions["Stacks"]) == 1
+    stack_description = stack_descriptions["Stacks"][0]
     api_id = stack_description["Outputs"]["RestApiId"]
     click.echo(f"API id is {api_id}")
     click.echo(f"Deploying {stage_name} stage...")
