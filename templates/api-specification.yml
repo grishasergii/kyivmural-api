@@ -28,7 +28,7 @@ paths:
       security:
         - AwsIamAuthorizer: []
       x-amazon-apigateway-integration:
-        type: aws
+        type: aws_proxy
         httpMethod: POST
         uri:
           Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations
@@ -61,7 +61,7 @@ paths:
       security:
         - AwsIamAuthorizer: []
       x-amazon-apigateway-integration:
-        type: aws
+        type: aws_proxy
         httpMethod: POST
         uri:
           Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations
@@ -106,7 +106,7 @@ paths:
       security:
         - AwsIamAuthorizer: []
       x-amazon-apigateway-integration:
-        type: aws
+        type: aws_proxy
         httpMethod: POST
         uri:
           Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations
@@ -152,7 +152,7 @@ paths:
       security:
         - AwsIamAuthorizer: [ ]
       x-amazon-apigateway-integration:
-        type: aws
+        type: aws_proxy
         httpMethod: POST
         uri:
           Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations
@@ -191,7 +191,7 @@ paths:
       security:
         - AwsIamAuthorizer: [ ]
       x-amazon-apigateway-integration:
-        type: aws
+        type: aws_proxy
         httpMethod: POST
         uri:
           Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations
