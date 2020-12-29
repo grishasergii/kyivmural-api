@@ -27,7 +27,7 @@ jobs:
       - name: Isort
         run: pipenv run isort functions/source --profile black --check-only
       - name: Black
-        run: pipenv run black --check functions/source
+        run: pipenv run black functions/source --check
       - name: Mypy
         run: pipenv run mypy functions/source
 
