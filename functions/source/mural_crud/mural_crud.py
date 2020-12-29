@@ -12,10 +12,11 @@ logger.setLevel(os.environ.get("LOG_LEVEL", logging.INFO))
 
 
 class DecimalEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, Decimal):
-            return float(obj)
-        return json.JSONEncoder.default(self, obj)
+    """Custom encoder that handles Decimal type"""
+    def default(self, o):
+        if isinstance(o, Decimal):
+            return float(o)
+        return json.JSONEncoder.default(self, o)
 
 
 def format_response(status_code, body=None):
