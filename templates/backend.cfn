@@ -1,0 +1,66 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Kyivmural API v0.1.0 - Backend
+
+Parameters:
+  MuralsTableName:
+    Description: name of the Murals database table
+    Type: String
+
+Resources:
+  LambdaMuralCRUDRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: logs
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+        - PolicyName: db-access
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:BatchGetItem
+                  - dynamodb:GetItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:BatchWriteItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:DeleteItem
+                Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${MuralsTableName}"
+
+  LambdaMuralCRUD:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code: ../functions/source/mural_crud
+      Handler: mural_crud.lambda_handler
+      Runtime: python3.8
+      Timeout: 30
+      MemorySize: 128
+      Role: !GetAtt LambdaMuralCRUDRole.Arn
+      Environment:
+        Variables:
+          LOG_LEVEL: DEBUG
+          MURALS_TABLE: !Ref MuralsTableName
+
+Outputs:
+  LambdaMuralCRUDArn:
+    Value: !GetAtt LambdaMuralCRUD.Arn

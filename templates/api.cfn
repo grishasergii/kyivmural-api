@@ -6,17 +6,37 @@ Parameters:
   Branch:
     Description: branch name
     Type: String
+  LambdaMuralCRUDArn:
+    Description: arn of the mural crud lambda
+    Type: String
 
 Resources:
-  ApiGateway:
+  RestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
       Description: !Sub "Kyivmural API Gateway - ${Branch}"
       EndpointConfiguration:
         Types:
-          - PRIVATE
+          - REGIONAL
       Body:
         Fn::Transform:
           Name: AWS::Include
           Parameters:
             Location: ./api-specification.yml
+
+  LambdaMuralCRUDPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref LambdaMuralCRUDArn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*/*/*"
+
+  ApiGatewayAccessLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/kyivmural/api-gateway/${Branch}/kyivmural-api-access-logs"
+
+Outputs:
+  RestApiId:
+    Value: !Ref RestApi

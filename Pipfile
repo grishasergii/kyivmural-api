@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 click = "*"
+boto3 = "*"
 
 [dev-packages]
 pytest = "*"
@@ -12,6 +13,12 @@ cfn-lint = "*"
 black = {version = "*", pre="true"}
 isort = {version = "*", pre="true"}
 bump2version = "*"
+moto = "*"
+pytest-cov = "*"
+pylint = "*"
+flake8 = "*"
+pycodestyle = "*"
+mypy = "*"
 
 [requires]
 python_version = "3.9"

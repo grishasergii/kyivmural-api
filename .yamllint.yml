@@ -1,0 +1,11 @@
+---
+
+yaml-files:
+  - "*.yaml"
+  - "*.yml"
+  - ".yamllint.yml"
+  - "*.cfn"
+
+rules:
+  line-length: disable
+  

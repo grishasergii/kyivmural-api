@@ -15,6 +15,7 @@ Resources:
       TimeoutInMinutes: 10
       Parameters:
         Branch: !Ref Branch
+        LambdaMuralCRUDArn: !GetAtt BackendStack.Outputs.LambdaMuralCRUDArn
 
   DatabaseStack:
     Type: AWS::CloudFormation::Stack
@@ -23,3 +24,15 @@ Resources:
       TimeoutInMinutes: 10
       Parameters:
         Branch: !Ref Branch
+
+  BackendStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://kyivmural-cfn-templates.s3.eu-central-1.amazonaws.com/kyivmural-api/${Branch}/backend.cfn"
+      TimeoutInMinutes: 10
+      Parameters:
+        MuralsTableName: !GetAtt DatabaseStack.Outputs.MuralsTableName
+
+Outputs:
+  RestApiId:
+    Value: !GetAtt ApiStack.Outputs.RestApiId
