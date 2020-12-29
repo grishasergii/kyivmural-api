@@ -11,8 +11,12 @@ Parameters:
     Type: String
 
 Resources:
-  HTTPApi:
-    Type: AWS::ApiGatewayV2::Api
+  RestApi:
+    Type: AWS::ApiGateway::RestApi
+    Description: !Sub "Kyivmural API Gateway - ${Branch}"
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
     Properties:
       Body:
         Fn::Transform:
@@ -26,20 +30,9 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !Ref LambdaMuralCRUDArn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HTTPApi}/*/*/*"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*/*/*"
 
   ApiGatewayAccessLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/kyivmural/api-gateway/${Branch}/kyivmural-api-access-logs"
-
-  Stage:
-    Type: AWS::ApiGatewayV2::Stage
-    Properties:
-      StageName: !Ref Branch
-      Description: !Sub "Kyivmural API - ${Branch}"
-      ApiId: !Ref HTTPApi
-      AutoDeploy: true
-      AccessLogSettings:
-        DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
-        Format: '{ "requestId":"$context.requestId", "ip": "$context.identity.sourceIp", "caller":"$context.identity.caller", "user":"$context.identity.user","requestTime":"$context.requestTime", "httpMethod":"$context.httpMethod", "status":"$context.status","protocol":"$context.protocol", "responseLength":"$context.responseLength" }'
