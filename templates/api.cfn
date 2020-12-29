@@ -36,3 +36,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/kyivmural/api-gateway/${Branch}/kyivmural-api-access-logs"
+
+Outputs:
+  RestApiId:
+    Value: !Ref RestApi
