@@ -44,6 +44,7 @@ Resources:
                   - dynamodb:BatchWriteItem
                   - dynamodb:PutItem
                   - dynamodb:UpdateItem
+                  - dynamodb:DeleteItem
                 Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${MuralsTableName}"
 
   LambdaMuralCRUD:
