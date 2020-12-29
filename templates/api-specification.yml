@@ -87,11 +87,11 @@ paths:
             type: string
             format: uuid
         - name: artistNameEn
-            in: path
-            description: name of the artist
-            required: true
-            schema:
-              type: string
+          in: path
+          description: name of the artist
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: Successful operation
@@ -109,15 +109,14 @@ paths:
           description: Internal server error
       security:
         - AwsIamAuthorizer: []
-        x-amazon-apigateway-integration:
-          type: aws_proxy
-          uri:
-            Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations
-          httpMethod: POST
-          responses:
-            default:
-              statusCode: 200
-
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations
+        httpMethod: POST
+        responses:
+          default:
+            statusCode: 200
 
 components:
   schemas:
