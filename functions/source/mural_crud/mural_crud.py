@@ -4,7 +4,7 @@ import logging
 import os
 from http import HTTPStatus
 
-import boto3
+import boto3  # pylint: disable=import-error
 
 logger = logging.getLogger()
 logger.setLevel(os.environ.get("LOG_LEVEL", logging.INFO))
