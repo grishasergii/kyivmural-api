@@ -127,6 +127,9 @@ components:
         id:
           type: string
           format: uuid
+        artist_name_en:
+          type: string
+          nullable: true
         thumbnail:
           type: string
           format: uri

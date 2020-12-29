@@ -42,6 +42,13 @@ def get_mural(mural_id, artist_name_en, murals_table):
     return HTTPStatus.OK, response["Item"]
 
 
+def get_all_murals(murals_table):
+    """Returns all murals"""
+    response = murals_table.scan(ProjectionExpression="id,artist_name_en,geo_position,thumbnail,status")
+    items = response.get("Items", [])
+    return HTTPStatus.OK, items
+
+
 def lambda_handler(event, context):
     """Entrypoint of the lambda function"""
     logger.info(
@@ -63,9 +70,12 @@ def lambda_handler(event, context):
         response_code, response_body = add_mural(mural_data, murals_table)
 
     if http_method == "GET":
-        mural_id = event["pathParameters"]["muralId"]
-        artist_name_en = event["pathParameters"]["artistNameEn"]
-        response_code, response_body = get_mural(mural_id, artist_name_en, murals_table)
+        mural_id = event.get("pathParameters", {}).get("muralId")
+        artist_name_en = event.get("pathParameters", {}).get("artistNameEn")
+        if mural_id is None and artist_name_en is None:
+            response_code, response_body = get_all_murals(murals_table)
+        else:
+            response_code, response_body = get_mural(mural_id, artist_name_en, murals_table)
 
     result = format_response(response_code, response_body)
     return result
