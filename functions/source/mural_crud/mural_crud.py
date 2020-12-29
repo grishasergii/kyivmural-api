@@ -32,9 +32,14 @@ def add_mural(data, murals_table):
     return HTTPStatus.CREATED, response
 
 
-def get_mural(mural_id):
+def get_mural(mural_id, artist_name_en, murals_table):
     """Returns a mural item by its id and artist name"""
-    raise NotImplementedError
+    response = murals_table.get_item(
+        Key={"id": mural_id, "artist_name_en": artist_name_en}
+    )
+    if "Item" not in response:
+        return HTTPStatus.NOT_FOUND, {"message": "mural not found"}
+    return HTTPStatus.OK, response["Item"]
 
 
 def lambda_handler(event, context):

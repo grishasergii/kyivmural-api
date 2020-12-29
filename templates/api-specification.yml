@@ -71,6 +71,54 @@ paths:
           default:
             statusCode: 200
 
+  /murals/{muralId}/{artistNameEn}:
+    get:
+      tags:
+        - mural
+      summary: Returns a single mural
+      description: Returns a single mural
+      operationId: getMuralByIdAndArtistName
+      parameters:
+        - name: muralId
+          in: path
+          description: ID of the mural to return
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: artistNameEn
+            in: path
+            description: name of the artist
+            required: true
+            schema:
+              type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Mural"
+        "400":
+          description: Bad request, invalid body
+        "401":
+          description: Bad request, authentication problem
+        "404":
+          description: Mural not found
+        "500":
+          description: Internal server error
+      security:
+        - AwsIamAuthorizer: []
+        x-amazon-apigateway-integration:
+          type: aws_proxy
+          uri:
+            Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations
+          httpMethod: POST
+          responses:
+            default:
+              statusCode: 200
+
+
 components:
   schemas:
     MuralSlim:
