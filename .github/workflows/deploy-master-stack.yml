@@ -31,5 +31,7 @@ jobs:
         env:
           ARTIFACTS_BUCKET: ${{ secrets.AWS_KYIVMURAL_ARTIFACTS_BUCKET }}
           CFN_BUCKET: ${{ secrets.AWS_KYIVMURAL_CFN_BUCKET }}
-      - name: Provision dev stack
+      - name: Provision master stack
         run: pipenv run python ci/provision.py --template-file templates/kyivmural-api.cfn --layer-name kyivmural-api --branch $BRANCH
+      - name: Deploy REST API stage
+        run: pipenv run python ci/deploy_api_gateway_stage.py --stack-name kyivmural-api-$BRANCH --stage-name $BRANCH
