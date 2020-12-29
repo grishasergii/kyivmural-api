@@ -3,8 +3,8 @@ import json
 import logging
 import os
 from http import HTTPStatus
-import boto3
 
+import boto3
 
 logger = logging.getLogger()
 logger.setLevel(os.environ.get("LOG_LEVEL", logging.INFO))
@@ -25,7 +25,7 @@ def add_mural(data, murals_table):
     try:
         response = murals_table.put_item(
             Item=data,
-            ConditionExpression="attribute_not_exists(id) AND attribute_not_exists(artist_name_en)"
+            ConditionExpression="attribute_not_exists(id) AND attribute_not_exists(artist_name_en)",
         )
     except murals_table.meta.client.exceptions.ConditionalCheckFailedException:
         return HTTPStatus.CONFLICT, {"message": "item already exists"}

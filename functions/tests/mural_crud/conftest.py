@@ -1,7 +1,8 @@
+import os
+
+import boto3
 import pytest
 from moto import mock_dynamodb2
-import boto3
-import os
 
 MURALS_TABLE = "murals-test"
 
@@ -42,44 +43,24 @@ def murals_table(dynamodb_resource):
     dynamodb_resource.create_table(
         TableName=MURALS_TABLE,
         KeySchema=[
-            {
-                "AttributeName": "id",
-                "KeyType": "HASH"
-            },
-            {
-                "AttributeName": "artist_name_en",
-                "KeyType": "RANGE"
-            }
+            {"AttributeName": "id", "KeyType": "HASH"},
+            {"AttributeName": "artist_name_en", "KeyType": "RANGE"},
         ],
         AttributeDefinitions=[
-            {
-                "AttributeName": "id",
-                "AttributeType": "S"
-            },
-            {
-                "AttributeName": "artist_name_en",
-                "AttributeType": "S"
-            },
+            {"AttributeName": "id", "AttributeType": "S"},
+            {"AttributeName": "artist_name_en", "AttributeType": "S"},
         ],
         GlobalSecondaryIndexes=[
             {
                 "IndexName": "artist_name_en-index",
                 "KeySchema": [
-                    {
-                        "AttributeName": "artist_name_en",
-                        "KeyType": "HASH"
-                    },
-                    {
-                        "AttributeName": "id",
-                        "KeyType": "RANGE"
-                    }
+                    {"AttributeName": "artist_name_en", "KeyType": "HASH"},
+                    {"AttributeName": "id", "KeyType": "RANGE"},
                 ],
-                "Projection": {
-                    "ProjectionType": "KEYS_ONLY"
-                }
+                "Projection": {"ProjectionType": "KEYS_ONLY"},
             }
         ],
-        BillingMode="PAY_PER_REQUEST"
+        BillingMode="PAY_PER_REQUEST",
     )
 
     table = dynamodb_resource.Table(MURALS_TABLE)
