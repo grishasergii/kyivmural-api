@@ -44,7 +44,9 @@ def get_mural(mural_id, artist_name_en, murals_table):
 
 def get_all_murals(murals_table):
     """Returns all murals"""
-    response = murals_table.scan(ProjectionExpression="id,artist_name_en,geo_position,thumbnail,status")
+    response = murals_table.scan(
+        ProjectionExpression="id,artist_name_en,geo_position,thumbnail,status"
+    )
     items = response.get("Items", [])
     return HTTPStatus.OK, items
 
@@ -75,7 +77,9 @@ def lambda_handler(event, context):
         if mural_id is None and artist_name_en is None:
             response_code, response_body = get_all_murals(murals_table)
         else:
-            response_code, response_body = get_mural(mural_id, artist_name_en, murals_table)
+            response_code, response_body = get_mural(
+                mural_id, artist_name_en, murals_table
+            )
 
     result = format_response(response_code, response_body)
     return result
