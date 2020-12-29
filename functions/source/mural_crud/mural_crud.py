@@ -1,4 +1,4 @@
-"""Create, update and delete Mural lambdal"""
+"""Create, update and delete Mural lambda"""
 import json
 import logging
 import os

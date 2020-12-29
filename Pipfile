@@ -16,6 +16,9 @@ bump2version = "*"
 moto = "*"
 pytest-cov = "*"
 pylint = "*"
+flake8 = "*"
+pycodestyle = "*"
+mypy = "*"
 
 [requires]
 python_version = "3.9"
