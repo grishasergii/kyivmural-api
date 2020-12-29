@@ -31,3 +31,11 @@ Resources:
       FunctionName: !Ref LambdaMuralCRUDArn
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/*/*"
+
+  Stage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      StageName: !Ref Branch
+      Description: !Sub "Kyivmural API - ${Branch}"
+      ApiId: !Ref ApiGateway
+      AutoDeploy: true
