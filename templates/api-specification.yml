@@ -37,6 +37,22 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseTemplates:
+              application/json: |
+                #set($inputRoot = $input.path('$'))
+                [
+                #foreach($elem in $inputRoot.Items)
+                 {
+                  "artist_name_uk" : "$elem.artist_name_uk.S",
+                  "artist_name_en" : "$elem.artist_name_en.S",
+                  "nickname" : "$elem.nickname.S",
+                  "webpage_url" : "$elem.webpage_url.S",
+                  "about_uk" : "$elem.about_uk.S",
+                  "about_en" : "$elem.about_en.S"
+                }
+                #if($foreach.hasNext),#end
+                #end
+                ]
         requestTemplates:
           application/json:
             Fn::Sub: "{\n    \"TableName\": \"${ArtistsTableName}\"\n}"
