@@ -30,16 +30,13 @@ paths:
       security:
         - AwsIamAuthorizer: []
       x-amazon-apigateway-integration:
-        credentials:
-          Fn::Sub: ${RestApiArtistsIntegrationRole}
-        uri:
-          Fn::Sub: ${ArtistsTableArn}/Scan
+        credentials: !GetAtt RestApiArtistsIntegrationRole.Arn
+        uri: !Sub "${ArtistsTableArn}/Scan"
         responses:
           default:
             statusCode: "200"
         requestTemplates:
-          application/json:
-            Fn::Sub: "{\n    \"TableName\": \"${ArtistsTableName}\"\n}"
+          application/json: !Sub "{\n    \"TableName\": \"${ArtistsTableName}\"\n}"
         passthroughBehavior: when_no_templates
         httpMethod: POST
         type: aws
