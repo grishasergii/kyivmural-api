@@ -11,9 +11,16 @@ def deploy(stack_name, stage_name):
     stack_descriptions = ExternalCmd.run_and_parse_json(
         f"aws cloudformation describe-stacks --stack-name {stack_name}"
     )
-    assert len(stack_descriptions["Stacks"]) == 1
+    api_id = None
     stack_description = stack_descriptions["Stacks"][0]
-    api_id = stack_description["Outputs"]["RestApiId"]
+    for output in stack_description["Outputs"]:
+        if output["OutputKey"] == "RestApiId":
+            api_id = output["OutputValue"]
+            break
+
+    if not api_id:
+        raise click.ClickException("RestApiId not found in stack outputs")
+
     click.echo(f"API id is {api_id}")
     click.echo(f"Deploying {stage_name} stage...")
     ExternalCmd.run(
