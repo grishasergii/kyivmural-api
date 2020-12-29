@@ -12,12 +12,9 @@ Parameters:
 
 Resources:
   ApiGateway:
-    Type: AWS::ApiGateway::RestApi
+    Type: AWS::ApiGatewayV2::Api
     Properties:
       Description: !Sub "Kyivmural API Gateway - ${Branch}"
-      EndpointConfiguration:
-        Types:
-          - PRIVATE
       Body:
         Fn::Transform:
           Name: AWS::Include
