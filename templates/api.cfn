@@ -9,6 +9,9 @@ Parameters:
   LambdaMuralCRUDArn:
     Description: arn of the mural crud lambda
     Type: String
+  ArtistsTableName:
+    Description: name of the artists table
+    Type: String
   ArtistsTableArn:
     Description: arn of the artists table
     Type: String
