@@ -52,3 +52,5 @@ Resources:
 Outputs:
   MuralsTableName:
     Value: !Ref MuralsTable
+  ArtistsTableArn:
+    Value: !GetAtt ArtistsTable.Arn
