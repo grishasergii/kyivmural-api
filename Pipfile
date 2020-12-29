@@ -15,6 +15,7 @@ isort = {version = "*", pre="true"}
 bump2version = "*"
 moto = "*"
 pytest-cov = "*"
+pylint = "*"
 
 [requires]
 python_version = "3.9"

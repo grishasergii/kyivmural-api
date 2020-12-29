@@ -33,6 +33,7 @@ def add_mural(data, murals_table):
 
 
 def get_mural(mural_id):
+    """Returns a mural item by its id and artist name"""
     raise NotImplementedError
 
 
