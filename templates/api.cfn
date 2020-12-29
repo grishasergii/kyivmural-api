@@ -16,6 +16,10 @@ Parameters:
     Description: arn of the artists table
     Type: String
 
+Metadata:
+  UnusedParams: # cfn-lint ignore
+    ArtistsTableName: !Ref ArtistsTableName # it is used in api-specification.yml when it is injected by cloudformation package
+
 Resources:
   RestApi:
     Type: AWS::ApiGateway::RestApi
