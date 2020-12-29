@@ -37,7 +37,7 @@ def delete_mural(mural_id, artist_name_en, murals_table):
     try:
         murals_table.delete_item(
             Key={"id": mural_id, "artist_name_en": artist_name_en},
-            ConditionExpression="attribute_exists(id) AND attribute_exists(artist_name_en)"
+            ConditionExpression="attribute_exists(id) AND attribute_exists(artist_name_en)",
         )
     except murals_table.meta.client.exceptions.ConditionalCheckFailedException:
         return HTTPStatus.NOT_FOUND, {"message": "mural not found"}
@@ -51,7 +51,9 @@ def update_mural(data, mural_id, artist_name_en, murals_table):
         return HTTPStatus.NOT_FOUND, {"message": "mural not found"}
     response_status, _ = add_mural(data, murals_table)
     if response_status == HTTPStatus.CONFLICT:
-        return HTTPStatus.INTERNAL_SERVER_ERROR, {"message": "something has just happened that should have never happened"}
+        return HTTPStatus.INTERNAL_SERVER_ERROR, {
+            "message": "something has just happened that should have never happened"
+        }
     return HTTPStatus.NO_CONTENT, {"message": "ok"}
 
 

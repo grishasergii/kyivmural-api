@@ -1,11 +1,12 @@
-import json
 from http import HTTPStatus
 from unittest.mock import Mock
 
 from functions.source.mural_crud.mural_crud import lambda_handler
 
 
-def test_delete_mural_when_does_not_exist_returns_not_found(fake_environment, murals_table):
+def test_delete_mural_when_does_not_exist_returns_not_found(
+    fake_environment, murals_table
+):
     event = {
         "requestContext": {"httpMethod": "DELETE"},
         "pathParameters": {
