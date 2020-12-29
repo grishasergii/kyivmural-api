@@ -83,7 +83,11 @@ def lambda_handler(event, context):
     )
     logger.debug("context: %s", context.__dict__)
 
-    http_method = event["requestContext"]["httpMethod"]
+    try:
+        http_method = event["requestContext"]["http"]["method"]
+    except KeyError:
+        return format_response(HTTPStatus.BAD_REQUEST, {"message": "http_method not found"})
+
     logger.debug("http method is %s", http_method)
 
     dynamodb = boto3.resource("dynamodb")

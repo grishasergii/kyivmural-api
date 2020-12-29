@@ -8,7 +8,7 @@ def test_delete_mural_when_does_not_exist_returns_not_found(
     fake_environment, murals_table
 ):
     event = {
-        "requestContext": {"httpMethod": "DELETE"},
+        "requestContext": {"http": {"method": "DELETE"}},
         "pathParameters": {
             "muralId": "test-id",
             "artistNameEn": "some artist",
@@ -30,7 +30,7 @@ def test_delete_mural_when_exists_deletes_mural(fake_environment, murals_table):
         }
     )
     event = {
-        "requestContext": {"httpMethod": "DELETE"},
+        "requestContext": {"http": {"method": "DELETE"}},
         "pathParameters": {
             "muralId": "test-id",
             "artistNameEn": "some-artist",
