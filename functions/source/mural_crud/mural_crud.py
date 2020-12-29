@@ -2,6 +2,7 @@
 import json
 import logging
 import os
+from decimal import Decimal
 from http import HTTPStatus
 
 import boto3  # pylint: disable=import-error
@@ -10,11 +11,18 @@ logger = logging.getLogger()
 logger.setLevel(os.environ.get("LOG_LEVEL", logging.INFO))
 
 
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Decimal):
+            return float(obj)
+        return json.JSONEncoder.default(self, obj)
+
+
 def format_response(status_code, body=None):
     """Formats response"""
     result = {"statusCode": status_code}
     if body is not None:
-        result["body"] = json.dumps(body)
+        result["body"] = json.dumps(body, cls=DecimalEncoder)
         result["headers"] = {"Content-Type": "application/json"}
     return result
 

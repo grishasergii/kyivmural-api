@@ -71,14 +71,14 @@ def test_get_all_murals_when_table_has_murals_result_contains_only_specified_fie
         "artist_name_en": "artist-1",
         "attribute-1": "attribute-1",
         "attribute-2": "attribute-2",
-        "geo_position": {"latitude": "1", "longitude": "1"},
+        "geo_position": {"latitude": 1, "longitude": 1},
         "thumbnail": "dickpic",
         "mural_status": "active",
     }
     expected = {
         "id": "test-1",
         "artist_name_en": "artist-1",
-        "geo_position": {"latitude": "1", "longitude": "1"},
+        "geo_position": {"latitude": 1, "longitude": 1},
         "thumbnail": "dickpic",
         "mural_status": "active",
     }
