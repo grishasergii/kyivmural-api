@@ -54,10 +54,7 @@ def test_get_mural_exists_returns_the_mural(fake_environment, murals_table):
 def test_get_all_murals_when_empty_table_returns_empty_list(
     fake_environment, murals_table
 ):
-    event = {
-        "requestContext": {"http": {"method": "GET"}},
-        "pathParameters": None
-    }
+    event = {"requestContext": {"http": {"method": "GET"}}, "pathParameters": None}
 
     context = Mock()
 
