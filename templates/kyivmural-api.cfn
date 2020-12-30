@@ -1,6 +1,6 @@
 ---
 AWSTemplateFormatVersion: "2010-09-09"
-Description: Kyivmural API v0.3.0
+Description: Kyivmural API v0.4.0
 
 Parameters:
   Branch:
