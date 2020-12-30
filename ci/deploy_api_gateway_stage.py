@@ -29,6 +29,9 @@ def deploy(stack_name, stage_name):
     ExternalCmd.run(
         f"aws apigateway create-deployment --rest-api-id {api_id} --stage-name {stage_name}"
     )
+    click.echo("Deployment done")
+
+    click.echo("Enabling access logging...")
     operations = [
         {
             "op": "add",
