@@ -33,7 +33,7 @@ Resources:
             ProjectionType: KEYS_ONLY
       BillingMode: PAY_PER_REQUEST
 
-  ArtistsTable:
+  ArtistsTableV2:
     Type: AWS::DynamoDB::Table
     Properties:
       TableName: !Sub "Kyivmural-Artists-${Branch}"
@@ -49,6 +49,6 @@ Outputs:
   MuralsTableName:
     Value: !Ref MuralsTable
   ArtistsTableName:
-    Value: !Ref ArtistsTable
+    Value: !Ref ArtistsTableV2
   ArtistsTableArn:
-    Value: !GetAtt ArtistsTable.Arn
+    Value: !GetAtt ArtistsTableV2.Arn
