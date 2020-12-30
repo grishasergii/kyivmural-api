@@ -127,7 +127,7 @@ paths:
                   },
                   "about_en" : {
                     "S": "$input.path('$.about_en')"
-                  },
+                  }
                 }
               }
         passthroughBehavior: when_no_templates
