@@ -176,9 +176,9 @@ paths:
             statusCode: "200"
           "400":
             statusCode: "400"
-          500:
+          "500":
             statusCode: "500"
-          503:
+          "503":
             statusCode: "503"
         requestTemplates:
           application/json:
