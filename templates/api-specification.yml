@@ -270,6 +270,11 @@ paths:
               {
                 "TableName": "${ArtistsTableName}",
                 "ConditionExpression": "attribute_exists(artist_name_en)",
+                "Key": {
+                  "artist_name_en" : {
+                    "S": "$input.params('artist_name_en')"
+                  }
+                },
                 "Item":{
                   "artist_name_uk" : {
                     "S": "$input.path('$.artist_name_uk')"
@@ -348,7 +353,7 @@ paths:
               {
                 "TableName": "${ArtistsTableName}",
                 "ConditionExpression": "attribute_exists(artist_name_en)",
-                "Key":{
+                "Key": {
                   "artist_name_en" : {
                     "S": "$input.params('artist_name_en')"
                   }
