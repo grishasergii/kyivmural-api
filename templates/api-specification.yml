@@ -93,7 +93,7 @@ paths:
           default:
             statusCode: "201"
           "400":
-            statusCode: "409"
+            statusCode: "400"
             responseTemplates:
               application/json: |
                 #set($inputRoot = $input.path('$'))
@@ -253,13 +253,13 @@ paths:
             statusCode: "204"
           "400":
             statusCode: "400"
-              responseTemplates:
-                application/json: |
-                  #set($inputRoot = $input.path('$'))
-                  $input.json("$")
-                  #if($inputRoot.toString().contains("com.amazonaws.dynamodb.v20120810#ConditionalCheckFailedException"))
-                    #set($context.responseOverride.status = 404)
-                  #end
+            responseTemplates:
+              application/json: |
+                #set($inputRoot = $input.path('$'))
+                $input.json("$")
+                #if($inputRoot.toString().contains("com.amazonaws.dynamodb.v20120810#ConditionalCheckFailedException"))
+                  #set($context.responseOverride.status = 404)
+                #end
           "500":
             statusCode: "500"
           "503":
@@ -331,13 +331,13 @@ paths:
             statusCode: "200"
           "400":
             statusCode: "400"
-              responseTemplates:
-                application/json: |
-                  #set($inputRoot = $input.path('$'))
-                  $input.json("$")
-                  #if($inputRoot.toString().contains("com.amazonaws.dynamodb.v20120810#ConditionalCheckFailedException"))
-                    #set($context.responseOverride.status = 404)
-                  #end
+            responseTemplates:
+              application/json: |
+                #set($inputRoot = $input.path('$'))
+                $input.json("$")
+                #if($inputRoot.toString().contains("com.amazonaws.dynamodb.v20120810#ConditionalCheckFailedException"))
+                  #set($context.responseOverride.status = 404)
+                #end
           "500":
             statusCode: "500"
           "503":
