@@ -108,6 +108,7 @@ paths:
             Fn::Sub: |
               {
                 "TableName": "${ArtistsTableName}",
+                "ConditionExpression": "attribute_not_exists(artist_name_en)",
                 "Item":{
                   "artist_name_uk" : {
                     "S": "$input.path('$.artist_name_uk')"
@@ -127,7 +128,6 @@ paths:
                   "about_en" : {
                     "S": "$input.path('$.about_en')"
                   },
-                  "ConditionExpression": "attribute_not_exists(artist_name_en)"
                 }
               }
         passthroughBehavior: when_no_templates
