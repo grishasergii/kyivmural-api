@@ -53,6 +53,8 @@ paths:
                 #if($foreach.hasNext),#end
                 #end
                 ]
+          "503":
+            description: Service unavailable
         requestTemplates:
           application/json:
             Fn::Sub: "{\n    \"TableName\": \"${ArtistsTableName}\"\n}"
@@ -81,6 +83,8 @@ paths:
           description: Conflict
         "500":
           description: Internal server error
+        "503":
+          description: Service unavailable
       security:
         - AwsIamAuthorizer: [ ]
       x-amazon-apigateway-request-validator: body
@@ -101,8 +105,10 @@ paths:
                 #if($inputRoot.toString().contains("com.amazonaws.dynamodb.v20120810#ConditionalCheckFailedException"))
                   #set($context.responseOverride.status = 409)
                 #end
-          5\d{2}:
+          "500":
             statusCode: "500"
+          "503":
+            statusCode: "503"
         requestTemplates:
           application/json:
             Fn::Sub: |
