@@ -165,7 +165,7 @@ paths:
           description: Internal server error
         "503":
           description: Service unavailable
-      x-amazon-apigateway-request-validator: all
+      x-amazon-apigateway-request-validator: parameters
       x-amazon-apigateway-integration:
         credentials:
           Fn::GetAtt: RestApiArtistsIntegrationRole.Arn
@@ -201,6 +201,153 @@ paths:
             Fn::Sub: |
               {
                 "TableName": "${ArtistsTableName}",
+                "Key":{
+                  "artist_name_en" : {
+                    "S": "$input.params('artist_name_en')"
+                  }
+                }
+              }
+        passthroughBehavior: when_no_templates
+        httpMethod: POST
+        type: aws
+    put:
+      summary: Updates a single artist
+      description: Updates a single artist
+      operationId: updateArtistByName
+      tags:
+        - artist
+      parameters:
+        - name: artist_name_en
+          in: path
+          description: Name of the artist in English
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Artist object to be added
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Artist"
+      responses:
+        "204":
+          description: Successful operation
+        "400":
+          description: Bad request, invalid body
+        "401":
+          description: Authentication problem
+        "404":
+          description: Artist not found
+        "500":
+          description: Internal server error
+        "503":
+          description: Service unavailable
+      x-amazon-apigateway-request-validator: all
+      x-amazon-apigateway-integration:
+        credentials:
+          Fn::GetAtt: RestApiArtistsIntegrationRole.Arn
+        uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:dynamodb:action/UpdateItem"
+        responses:
+          default:
+            statusCode: "204"
+          "400":
+            statusCode: "400"
+              responseTemplates:
+                application/json: |
+                  #set($inputRoot = $input.path('$'))
+                  $input.json("$")
+                  #if($inputRoot.toString().contains("com.amazonaws.dynamodb.v20120810#ConditionalCheckFailedException"))
+                    #set($context.responseOverride.status = 404)
+                  #end
+          "500":
+            statusCode: "500"
+          "503":
+            statusCode: "503"
+        requestTemplates:
+          application/json:
+            Fn::Sub: |
+              {
+                "TableName": "${ArtistsTableName}",
+                "ConditionExpression": "attribute_exists(artist_name_en)",
+                "Item":{
+                  "artist_name_uk" : {
+                    "S": "$input.path('$.artist_name_uk')"
+                  },
+                  "artist_name_en" : {
+                    "S": "$input.path('$.artist_name_en')"
+                  },
+                  "nickname" : {
+                    "S": "$input.path('$.nickname')"
+                  },
+                  "webpage_url" : {
+                    "S": "$input.path('$.webpage_url')"
+                  },
+                  "about_uk" : {
+                    "S": "$input.path('$.about_uk')"
+                  },
+                  "about_en" : {
+                    "S": "$input.path('$.about_en')"
+                  }
+                }
+              }
+        passthroughBehavior: when_no_templates
+        httpMethod: POST
+        type: aws
+    delete:
+      summary: Deletes a single artist
+      description: Deletes a single artist
+      operationId: deleteArtistByName
+      tags:
+        - artist
+      parameters:
+        - name: artist_name_en
+          in: path
+          description: Name of the artist in English
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Bad request, invalid body
+        "401":
+          description: Authentication problem
+        "404":
+          description: Artist not found
+        "500":
+          description: Internal server error
+        "503":
+          description: Service unavailable
+      x-amazon-apigateway-request-validator: parameters
+      x-amazon-apigateway-integration:
+        credentials:
+          Fn::GetAtt: RestApiArtistsIntegrationRole.Arn
+        uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:dynamodb:action/DeleteItem"
+        responses:
+          default:
+            statusCode: "200"
+          "400":
+            statusCode: "400"
+              responseTemplates:
+                application/json: |
+                  #set($inputRoot = $input.path('$'))
+                  $input.json("$")
+                  #if($inputRoot.toString().contains("com.amazonaws.dynamodb.v20120810#ConditionalCheckFailedException"))
+                    #set($context.responseOverride.status = 404)
+                  #end
+          "500":
+            statusCode: "500"
+          "503":
+            statusCode: "503"
+        requestTemplates:
+          application/json:
+            Fn::Sub: |
+              {
+                "TableName": "${ArtistsTableName}",
+                "ConditionExpression": "attribute_exists(artist_name_en)",
                 "Key":{
                   "artist_name_en" : {
                     "S": "$input.params('artist_name_en')"
