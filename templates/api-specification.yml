@@ -75,6 +75,12 @@ paths:
       responses:
         "201":
           description: Successful operation
+        "400":
+          description: Bad request, invalid body
+        "409":
+          description: Conflict
+        "500":
+          description: Internal server error
       security:
         - AwsIamAuthorizer: [ ]
       x-amazon-apigateway-request-validator: body
@@ -85,7 +91,18 @@ paths:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:dynamodb:action/PutItem"
         responses:
           default:
-            statusCode: "200"
+            statusCode: "201"
+          "400":
+            statusCode: "409"
+            responseTemplates:
+              application/json: |
+                #set($inputRoot = $input.path('$'))
+                $input.json("$")
+                #if($inputRoot.toString().contains("com.amazonaws.dynamodb.v20120810#ConditionalCheckFailedException"))
+                  #set($context.responseOverride.status = 409)
+                #end
+          5\d{2}:
+            statusCode: "500"
         requestTemplates:
           application/json:
             Fn::Sub: |
@@ -109,7 +126,8 @@ paths:
                   },
                   "about_en" : {
                     "S": "$input.path('$.about_en')"
-                  }
+                  },
+                  "ConditionExpression": "attribute_not_exists(artist_name_en)"
                 }
               }
         passthroughBehavior: when_no_templates
