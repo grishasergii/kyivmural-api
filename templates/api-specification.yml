@@ -174,6 +174,22 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseTemplates:
+              application/json: |
+                #set($item = $input.path('$.Item'))
+                #if($item.toString() == "")
+                    #set($context.responseOverride.status = 404)
+                    {"message": "artist not found"}
+                #else
+                    {
+                      "artist_name_uk" : "$item.artist_name_uk.S",
+                      "artist_name_en" : "$item.artist_name_en.S",
+                      "nickname" : "$item.nickname.S",
+                      "webpage_url" : "$item.webpage_url.S",
+                      "about_uk" : "$item.about_uk.S",
+                      "about_en" : "$item.about_en.S"
+                    }
+                #end
           "400":
             statusCode: "400"
           "500":
