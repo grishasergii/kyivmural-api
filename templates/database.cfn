@@ -36,7 +36,7 @@ Resources:
   ArtistsTableV2:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub "Kyivmural-Artists-${Branch}"
+      TableName: !Sub "Kyivmural-Artists-${Branch}-V2"
       AttributeDefinitions:
         - AttributeName: artist_name_en
           AttributeType: S
