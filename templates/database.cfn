@@ -45,8 +45,6 @@ Resources:
       KeySchema:
         - AttributeName: artist_name_en
           KeyType: HASH
-        - AttributeName: artist_name_uk
-          KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
 
 Outputs:
