@@ -40,8 +40,6 @@ Resources:
       AttributeDefinitions:
         - AttributeName: artist_name_en
           AttributeType: S
-        - AttributeName: artist_name_uk
-          AttributeType: S
       KeySchema:
         - AttributeName: artist_name_en
           KeyType: HASH
