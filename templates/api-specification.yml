@@ -59,6 +59,62 @@ paths:
         passthroughBehavior: when_no_templates
         httpMethod: POST
         type: aws
+    post:
+      summary: Add a new artist
+      description: add a new artist
+      operationId: addArtist
+      tags:
+        - artist
+      requestBody:
+        description: Artist object to be added
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Artist"
+        required: true
+      responses:
+        "201":
+          description: Successful operation
+      security:
+        - AwsIamAuthorizer: [ ]
+      x-amazon-apigateway-request-validator: body
+      x-amazon-apigateway-integration:
+        credentials:
+          Fn::GetAtt: RestApiArtistsIntegrationRole.Arn
+        uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:dynamodb:action/PutItem"
+        responses:
+          default:
+            statusCode: "200"
+        requestTemplates:
+          application/json:
+            Fn::Sub: |
+              {
+                "TableName": "${ArtistsTableName}",
+                "Item":{
+                  "artist_name_uk" : {
+                    "S": "$input.path('$.artist_name_uk')"
+                  },
+                  "artist_name_en" : {
+                    "S": "$input.path('$.artist_name_en')"
+                  },
+                  "nickname" : {
+                    "S": "$input.path('$.nickname')"
+                  },
+                  "webpage_url" : {
+                    "S": "$input.path('$.webpage_url')"
+                  },
+                  "about_uk" : {
+                    "S": "$input.path('$.about_uk')"
+                  },
+                  "about_en" : {
+                    "S": "$input.path('$.about_en')"
+                  }
+                }
+              }
+        passthroughBehavior: when_no_templates
+        httpMethod: POST
+        type: aws
 
   /murals:
     get:
