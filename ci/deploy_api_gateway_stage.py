@@ -23,6 +23,7 @@ def deploy(stack_name, stage_name):
     stack_description = stack_descriptions["Stacks"][0]
     api_id = _get_output_from_stack_description(stack_description, "RestApiId")
     log_group_arn = _get_output_from_stack_description(stack_description, "ApiGatewayAccessLogGroupArn")
+    log_group_arn = log_group_arn.rstrip(":*")
 
     click.echo(f"API id is {api_id}")
     click.echo(f"Deploying {stage_name} stage...")
@@ -36,16 +37,26 @@ def deploy(stack_name, stage_name):
         {
             "op": "add",
             "path": "/accessLogSettings/destinationArn",
-            "value": log_group_arn
+            "value": f"{log_group_arn}"
         },
         {
             "op": "add",
             "path": "/accessLogSettings/format",
-            "value": '{ "requestId":"$context.requestId", "ip": "$context.identity.sourceIp", "caller":"$context.identity.caller", "user":"$context.identity.user","requestTime":"$context.requestTime", "httpMethod":"$context.httpMethod","resourcePath":"$context.resourcePath", "status":"$context.status","protocol":"$context.protocol", "responseLength":"$context.responseLength" }'
+            "value": "{ \"requestId\":\"$context.requestId\", \"ip\": \"$context.identity.sourceIp\", \"caller\":\"$context.identity.caller\", \"user\":\"$context.identity.user\",\"requestTime\":\"$context.requestTime\", \"httpMethod\":\"$context.httpMethod\",\"resourcePath\":\"$context.resourcePath\", \"status\":\"$context.status\",\"protocol\":\"$context.protocol\", \"responseLength\":\"$context.responseLength\" }"
         },
+        {
+            "op": "replace",
+            "path": "/*/*/logging/loglevel",
+            "value": "INFO"
+        },
+        {
+            "op": "replace",
+            "path": "/*/*/logging/dataTrace",
+            "value": "true"
+        }
     ]
     ExternalCmd.run(
-        f"aws apigateway update-stage --rest-api-id {api_id} --stage-name {stage_name} --patch-operations {json.dumps(operations)}"
+        f"aws apigateway update-stage --rest-api-id {api_id} --stage-name {stage_name} --patch-operations '{json.dumps(operations)}'"
     )
     click.echo("Done")
 
