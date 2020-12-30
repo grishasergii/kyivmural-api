@@ -33,22 +33,22 @@ Resources:
             ProjectionType: KEYS_ONLY
       BillingMode: PAY_PER_REQUEST
 
-  ArtistsTable:
+  ArtistsTableV2:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub "Kyivmural-Artists-${Branch}"
+      TableName: !Sub "Kyivmural-Artists-${Branch}-V2"
       AttributeDefinitions:
         - AttributeName: artist_name_en
-          AttributeType: S
-        - AttributeName: artist_name_uk
           AttributeType: S
       KeySchema:
         - AttributeName: artist_name_en
           KeyType: HASH
-        - AttributeName: artist_name_uk
-          KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
 
 Outputs:
   MuralsTableName:
     Value: !Ref MuralsTable
+  ArtistsTableName:
+    Value: !Ref ArtistsTableV2
+  ArtistsTableArn:
+    Value: !GetAtt ArtistsTableV2.Arn

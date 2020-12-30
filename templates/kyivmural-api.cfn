@@ -16,6 +16,8 @@ Resources:
       Parameters:
         Branch: !Ref Branch
         LambdaMuralCRUDArn: !GetAtt BackendStack.Outputs.LambdaMuralCRUDArn
+        ArtistsTableArn: !GetAtt DatabaseStack.Outputs.ArtistsTableArn
+        ArtistsTableName: !GetAtt DatabaseStack.Outputs.ArtistsTableName
 
   DatabaseStack:
     Type: AWS::CloudFormation::Stack

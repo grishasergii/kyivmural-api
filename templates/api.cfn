@@ -9,6 +9,16 @@ Parameters:
   LambdaMuralCRUDArn:
     Description: arn of the mural crud lambda
     Type: String
+  ArtistsTableName:
+    Description: name of the artists table
+    Type: String
+  ArtistsTableArn:
+    Description: arn of the artists table
+    Type: String
+
+Metadata:
+  UnusedParams: # cfn-lint ignore
+    ArtistsTableName: !Ref ArtistsTableName # it is used in api-specification.yml when it is injected by cloudformation package
 
 Resources:
   RestApi:
@@ -23,6 +33,34 @@ Resources:
           Name: AWS::Include
           Parameters:
             Location: ./api-specification.yml
+
+  RestApiArtistsIntegrationRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: apigateway.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: db-access
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:BatchGetItem
+                  - dynamodb:GetItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:BatchWriteItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:DeleteItem
+                Resource: !Ref ArtistsTableArn
 
   LambdaMuralCRUDPermission:
     Type: AWS::Lambda::Permission
