@@ -38,3 +38,5 @@ Resources:
 Outputs:
   RestApiId:
     Value: !GetAtt ApiStack.Outputs.RestApiId
+  ApiGatewayAccessLogGroupArn:
+    Value: !GetAtt ApiStack.Outputs.ApiGatewayAccessLogGroupArn

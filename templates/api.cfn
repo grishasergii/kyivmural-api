@@ -78,3 +78,5 @@ Resources:
 Outputs:
   RestApiId:
     Value: !Ref RestApi
+  ApiGatewayAccessLogGroupArn:
+    Value: !GetAtt ApiGatewayAccessLogGroup.Arn
