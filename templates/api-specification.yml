@@ -11,7 +11,7 @@ tags:
     description: Operations about artists
 
 paths:
-  /artist:
+  /artists:
     get:
       summary: Returns a list of artists
       description: Returns a list of artists
@@ -438,7 +438,7 @@ paths:
           Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations
         payloadFormatVersion: "2.0"
 
-  /murals/{muralId}/{artistNameEn}:
+  /murals/{mural_id}/{artist_name_en}:
     get:
       tags:
         - mural
@@ -446,14 +446,14 @@ paths:
       description: Returns a single mural
       operationId: getMuralByIdAndArtistName
       parameters:
-        - name: muralId
+        - name: mural_id
           in: path
           description: ID of the mural to return
           required: true
           schema:
             type: string
             format: uuid
-        - name: artistNameEn
+        - name: artist_name_en
           in: path
           description: name of the artist
           required: true
@@ -490,14 +490,14 @@ paths:
       tags:
         - mural
       parameters:
-        - name: muralId
+        - name: mural_id
           in: path
           description: ID of the mural to return
           required: true
           schema:
             type: string
             format: uuid
-        - name: artistNameEn
+        - name: artist_name_en
           in: path
           description: name of the artist
           required: true
@@ -537,14 +537,14 @@ paths:
       tags:
         - mural
       parameters:
-        - name: muralId
+        - name: mural_id
           in: path
           description: ID of the mural to return
           required: true
           schema:
             type: string
             format: uuid
-        - name: artistNameEn
+        - name: artist_name_en
           in: path
           description: name of the artist
           required: true

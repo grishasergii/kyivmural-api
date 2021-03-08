@@ -115,8 +115,8 @@ def lambda_handler(event, context):
 
     if http_method == "GET":
         try:
-            mural_id = unquote(event["pathParameters"]["muralId"])
-            artist_name_en = unquote(event["pathParameters"]["artistNameEn"])
+            mural_id = unquote(event["pathParameters"]["mural_id"])
+            artist_name_en = unquote(event["pathParameters"]["artist_name_en"])
         except (TypeError, KeyError):
             mural_id = None
             artist_name_en = None
@@ -128,16 +128,16 @@ def lambda_handler(event, context):
             )
 
     if http_method == "PUT":
-        mural_id = unquote(event["pathParameters"]["muralId"])
-        artist_name_en = unquote(event["pathParameters"]["artistNameEn"])
+        mural_id = unquote(event["pathParameters"]["mural_id"])
+        artist_name_en = unquote(event["pathParameters"]["artist_name_en"])
         mural_data = json.loads(event["body"], parse_float=Decimal)
         response_code, response_body = update_mural(
             mural_data, mural_id, artist_name_en, murals_table
         )
 
     if http_method == "DELETE":
-        mural_id = unquote(event["pathParameters"]["muralId"])
-        artist_name_en = unquote(event["pathParameters"]["artistNameEn"])
+        mural_id = unquote(event["pathParameters"]["mural_id"])
+        artist_name_en = unquote(event["pathParameters"]["artist_name_en"])
         response_code, response_body = delete_mural(
             mural_id, artist_name_en, murals_table
         )
