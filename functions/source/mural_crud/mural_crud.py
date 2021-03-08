@@ -4,6 +4,7 @@ import logging
 import os
 from decimal import Decimal
 from http import HTTPStatus
+from urllib.parse import unquote
 
 import boto3  # pylint: disable=import-error
 
@@ -109,13 +110,13 @@ def lambda_handler(event, context):
     response_body = {"message": "Unknown request"}
 
     if http_method == "POST":
-        mural_data = json.loads(event["body"])
+        mural_data = json.loads(event["body"], parse_float=Decimal)
         response_code, response_body = add_mural(mural_data, murals_table)
 
     if http_method == "GET":
         try:
-            mural_id = event["pathParameters"]["muralId"]
-            artist_name_en = event["pathParameters"]["artistNameEn"]
+            mural_id = unquote(event["pathParameters"]["muralId"])
+            artist_name_en = unquote(event["pathParameters"]["artistNameEn"])
         except (TypeError, KeyError):
             mural_id = None
             artist_name_en = None
@@ -127,16 +128,16 @@ def lambda_handler(event, context):
             )
 
     if http_method == "PUT":
-        mural_id = event["pathParameters"]["muralId"]
-        artist_name_en = event["pathParameters"]["artistNameEn"]
-        mural_data = json.loads(event["body"])
+        mural_id = unquote(event["pathParameters"]["muralId"])
+        artist_name_en = unquote(event["pathParameters"]["artistNameEn"])
+        mural_data = json.loads(event["body"], parse_float=Decimal)
         response_code, response_body = update_mural(
             mural_data, mural_id, artist_name_en, murals_table
         )
 
     if http_method == "DELETE":
-        mural_id = event["pathParameters"]["muralId"]
-        artist_name_en = event["pathParameters"]["artistNameEn"]
+        mural_id = unquote(event["pathParameters"]["muralId"])
+        artist_name_en = unquote(event["pathParameters"]["artistNameEn"])
         response_code, response_body = delete_mural(
             mural_id, artist_name_en, murals_table
         )
