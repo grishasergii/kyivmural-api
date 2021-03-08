@@ -11,8 +11,8 @@ def test_update_mural_when_does_not_exist_returns_not_found(
     event = {
         "requestContext": {"httpMethod": "PUT"},
         "pathParameters": {
-            "muralId": "test-id",
-            "artistNameEn": "some artist",
+            "mural_id": "test-id",
+            "artist_name_en": "some artist",
         },
         "body": json.dumps(
             {
@@ -44,8 +44,8 @@ def test_update_mural_when_exists_updates_mural(fake_environment, murals_table):
     event = {
         "requestContext": {"httpMethod": "PUT"},
         "pathParameters": {
-            "muralId": "test-1",
-            "artistNameEn": "artist-2",
+            "mural_id": "test-1",
+            "artist_name_en": "artist-2",
         },
         "body": json.dumps(expected),
     }

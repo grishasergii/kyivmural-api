@@ -9,8 +9,8 @@ def test_get_mural_does_not_exist_returns_not_found(fake_environment, murals_tab
     event = {
         "requestContext": {"httpMethod": "GET"},
         "pathParameters": {
-            "muralId": "test-id",
-            "artistNameEn": "some artist",
+            "mural_id": "test-id",
+            "artist_name_en": "some artist",
         },
     }
     context = Mock()
@@ -38,8 +38,8 @@ def test_get_mural_exists_returns_the_mural(fake_environment, murals_table):
     event = {
         "requestContext": {"httpMethod": "GET"},
         "pathParameters": {
-            "muralId": expected["id"],
-            "artistNameEn": expected["artist_name_en"],
+            "mural_id": expected["id"],
+            "artist_name_en": expected["artist_name_en"],
         },
     }
 
