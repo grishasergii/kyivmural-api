@@ -150,7 +150,7 @@ paths:
         httpMethod: POST
         type: aws
 
-  /artist/{artist_name_en}:
+  /artists/{artist_name_en}:
     get:
       summary: Returns a single artist
       description: Returns a single artist
