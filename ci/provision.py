@@ -34,6 +34,7 @@ def provision(template_file, layer_name, branch):
             f"--stack-name {stack_name} "
             f"--template-body file://{template_file} "
             f"--parameters ParameterKey=Branch,ParameterValue={branch} "
+            "--tags file://tags.json "
             "--capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND"
         )
         stack_id = result["StackId"]
@@ -48,6 +49,7 @@ def provision(template_file, layer_name, branch):
             f"--stack-name {stack_name} "
             f"--template-body file://{template_file} "
             f"--parameters ParameterKey=Branch,ParameterValue={branch} "
+            "--tags file://tags.json "
             "--capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND"
         )
         stack_id = result["StackId"]
