@@ -60,7 +60,7 @@ def test_get_all_murals_when_empty_table_returns_empty_list(
 
     actual = lambda_handler(event, context)
     assert actual["statusCode"] == HTTPStatus.OK
-    assert len(json.loads(actual["body"])) == 0
+    assert len(json.loads(actual["body"])["items"]) == 0
 
 
 def test_get_all_murals_when_table_has_murals_result_contains_only_specified_fields(
@@ -92,7 +92,7 @@ def test_get_all_murals_when_table_has_murals_result_contains_only_specified_fie
 
     actual = lambda_handler(event, context)
     assert actual["statusCode"] == HTTPStatus.OK
-    actual_items = json.loads(actual["body"])
+    actual_items = json.loads(actual["body"])["items"]
     assert len(actual_items) == 1
     assert actual_items[0] == expected
 
@@ -100,7 +100,7 @@ def test_get_all_murals_when_table_has_murals_result_contains_only_specified_fie
 def test_get_all_murals_when_table_has_murals_returns_list_with_all_murals(
     fake_environment, murals_table
 ):
-    num_murals = 500
+    num_murals = 200
     for i in range(num_murals):
         item = {
             "id": f"test-{i}",
@@ -117,4 +117,4 @@ def test_get_all_murals_when_table_has_murals_returns_list_with_all_murals(
 
     actual = lambda_handler(event, context)
     assert actual["statusCode"] == HTTPStatus.OK
-    assert len(json.loads(actual["body"])) == num_murals
+    assert len(json.loads(actual["body"])["items"]) == num_murals
