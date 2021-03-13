@@ -379,6 +379,87 @@ paths:
         httpMethod: POST
         type: aws
 
+  /artists/{artist_name_en}/murals:
+    get:
+      summary: Returns murals that belong to an artist
+      description: Returns murals that belong to an artist
+      operationId: getArtistMurals
+      tags:
+        - artist
+      parameters:
+        - name: artist_name_en
+          in: path
+          description: Name of the artist in English
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MuralSlim"
+        "400":
+          description: Bad request, invalid body
+        "401":
+          description: Authentication problem
+        "404":
+          description: Artist not found
+        "500":
+          description: Internal server error
+        "503":
+          description: Service unavailable
+      x-amazon-apigateway-request-validator: parameters
+      x-amazon-apigateway-integration:
+        credentials:
+          Fn::GetAtt: RestApiArtistsIntegrationRole.Arn
+        uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:dynamodb:action/Query"
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json: |
+                #set($inputRoot = $input.path('$'))
+                [
+                #foreach($elem in $inputRoot.Items)
+                 {
+                  "artist_name_en" : "$elem.artist_name_en.S",
+                  "thumbnail" : "$elem.thumbnail.S",
+                  "id" : "$elem.id.S",
+                  "mural_status" : "$elem.mural_status.S",
+                  "geo_position" : {
+                    "latitude": "$elem.geo_position.M.latitude.N",
+                    "longitude": "$elem.geo_position.M.longitude.N"
+                  }
+                }
+                #if($foreach.hasNext),#end
+                #end
+                ]
+          "400":
+            statusCode: "400"
+          "500":
+            statusCode: "500"
+          "503":
+            statusCode: "503"
+        requestTemplates:
+          application/json:
+            Fn::Sub: |
+              {
+                "TableName": "${MuralsTableName}",
+                "IndexName": "${MuralsTableArtistGlobalSecondaryIndexName}",
+                "KeyConditionExpression": "artist_name_en = :artist",
+                "ExpressionAttributeValues": {
+                  ":artist": {"S": "$input.params('artist_name_en')"}
+                }
+              }
+        passthroughBehavior: when_no_templates
+        httpMethod: POST
+        type: aws
+
   /murals:
     get:
       summary: Returns a list of murals

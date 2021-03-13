@@ -18,6 +18,8 @@ Resources:
         LambdaMuralCRUDArn: !GetAtt BackendStack.Outputs.LambdaMuralCRUDArn
         ArtistsTableArn: !GetAtt DatabaseStack.Outputs.ArtistsTableArn
         ArtistsTableName: !GetAtt DatabaseStack.Outputs.ArtistsTableName
+        MuralsTableName: !GetAtt DatabaseStack.Outputs.MuralsTableName
+        MuralsTableArtistGlobalSecondaryIndexName: !GetAtt DatabaseStack.Outputs.MuralsTableArtistGlobalSecondaryIndexName
 
   DatabaseStack:
     Type: AWS::CloudFormation::Stack

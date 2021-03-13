@@ -72,6 +72,8 @@ Resources:
 Outputs:
   MuralsTableName:
     Value: !Ref MuralsTable
+  MuralsTableArtistGlobalSecondaryIndexName:
+    Value: artist_name_en-index-v3
   ArtistsTableName:
     Value: !Ref ArtistsTableV2
   ArtistsTableArn:

@@ -15,6 +15,12 @@ Parameters:
   ArtistsTableArn:
     Description: arn of the artists table
     Type: String
+  MuralsTableName:
+    Description: name of the murals table
+    Type: String
+  MuralsTableArtistGlobalSecondaryIndexName:
+    Description: name of the global secondary index of the murals table mapping artist name to murals id
+    Type: String
 
 Metadata:
   UnusedParams: # cfn-lint ignore
@@ -61,6 +67,12 @@ Resources:
                   - dynamodb:UpdateItem
                   - dynamodb:DeleteItem
                 Resource: !Ref ArtistsTableArn
+              - Effect: Allow
+                Action:
+                  - dynamodb:BatchGetItem
+                  - dynamodb:GetItem
+                  - dynamodb:Query
+                Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${MuralsTableName}/index/${MuralsTableArtistGlobalSecondaryIndexName}"
 
   LambdaMuralCRUDPermission:
     Type: AWS::Lambda::Permission
