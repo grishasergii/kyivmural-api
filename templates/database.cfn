@@ -1,6 +1,6 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Kyivmural API v0.4.0 - Database
+Description: Kyivmural API v0.5.0 - Database
 
 Parameters:
   Branch:
@@ -31,6 +31,18 @@ Resources:
               KeyType: RANGE
           Projection:
             ProjectionType: KEYS_ONLY
+        - IndexName: artist_name_en-index-v2
+          KeySchema:
+            - AttributeName: artist_name_en
+              KeyType: HASH
+            - AttributeName: id
+              KeyType: RANGE
+          Projection:
+            ProjectionType: INCLUDE
+            NonKeyAttributes:
+              - thumbnail
+              - geo_position
+              - mural_status
       BillingMode: PAY_PER_REQUEST
 
   ArtistsTableV2:
@@ -48,6 +60,8 @@ Resources:
 Outputs:
   MuralsTableName:
     Value: !Ref MuralsTable
+  MuralsTableArtistGlobalSecondaryIndexName:
+    Value: artist_name_en-index-v2
   ArtistsTableName:
     Value: !Ref ArtistsTableV2
   ArtistsTableArn:

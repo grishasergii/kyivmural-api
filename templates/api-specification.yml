@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Kyivmural API
   description: Kyivmural API
-  version: 0.4.0
+  version: 0.5.0
 tags:
   - name: mural
     description: Operations about murals
@@ -11,7 +11,7 @@ tags:
     description: Operations about artists
 
 paths:
-  /artist:
+  /artists:
     get:
       summary: Returns a list of artists
       description: Returns a list of artists
@@ -150,7 +150,7 @@ paths:
         httpMethod: POST
         type: aws
 
-  /artist/{artist_name_en}:
+  /artists/{artist_name_en}:
     get:
       summary: Returns a single artist
       description: Returns a single artist
@@ -219,7 +219,7 @@ paths:
                 "TableName": "${ArtistsTableName}",
                 "Key":{
                   "artist_name_en" : {
-                    "S": "$input.params('artist_name_en')"
+                    "S": "$util.urlDecode($input.params('artist_name_en'))"
                   }
                 }
               }
@@ -288,7 +288,7 @@ paths:
                 "ConditionExpression": "attribute_exists(artist_name_en)",
                 "Key": {
                   "artist_name_en" : {
-                    "S": "$input.params('artist_name_en')"
+                    "S": "$util.urlDecode($input.params('artist_name_en'))"
                   }
                 },
                 "Item":{
@@ -371,8 +371,89 @@ paths:
                 "ConditionExpression": "attribute_exists(artist_name_en)",
                 "Key": {
                   "artist_name_en" : {
-                    "S": "$input.params('artist_name_en')"
+                    "S": "$util.urlDecode($input.params('artist_name_en'))"
                   }
+                }
+              }
+        passthroughBehavior: when_no_templates
+        httpMethod: POST
+        type: aws
+
+  /artists/{artist_name_en}/murals:
+    get:
+      summary: Returns murals that belong to an artist
+      description: Returns murals that belong to an artist
+      operationId: getArtistMurals
+      tags:
+        - artist
+      parameters:
+        - name: artist_name_en
+          in: path
+          description: Name of the artist in English
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MuralSlim"
+        "400":
+          description: Bad request, invalid body
+        "401":
+          description: Authentication problem
+        "404":
+          description: Artist not found
+        "500":
+          description: Internal server error
+        "503":
+          description: Service unavailable
+      x-amazon-apigateway-request-validator: parameters
+      x-amazon-apigateway-integration:
+        credentials:
+          Fn::GetAtt: RestApiArtistsIntegrationRole.Arn
+        uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:dynamodb:action/Query"
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json: |
+                #set($inputRoot = $input.path('$'))
+                [
+                #foreach($elem in $inputRoot.Items)
+                 {
+                  "artist_name_en" : "$elem.artist_name_en.S",
+                  "thumbnail" : "$elem.thumbnail.S",
+                  "id" : "$elem.id.S",
+                  "mural_status" : "$elem.mural_status.S",
+                  "geo_position" : {
+                    "latitude": "$elem.geo_position.M.latitude.N",
+                    "longitude": "$elem.geo_position.M.longitude.N"
+                  }
+                }
+                #if($foreach.hasNext),#end
+                #end
+                ]
+          "400":
+            statusCode: "400"
+          "500":
+            statusCode: "500"
+          "503":
+            statusCode: "503"
+        requestTemplates:
+          application/json:
+            Fn::Sub: |
+              {
+                "TableName": "${MuralsTableName}",
+                "IndexName": "${MuralsTableArtistGlobalSecondaryIndexName}",
+                "KeyConditionExpression": "artist_name_en = :artist",
+                "ExpressionAttributeValues": {
+                  ":artist": {"S": "$util.urlDecode($input.params('artist_name_en'))"}
                 }
               }
         passthroughBehavior: when_no_templates
@@ -386,15 +467,37 @@ paths:
       operationId: getMurals
       tags:
         - mural
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 200
+          required: false
+          description: The number of items to return
+        - in: query
+          name: next_token
+          schema:
+            type: string
+          required: false
+          description: Pagination token
       responses:
         "200":
           description: An array of murals
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/MuralSlim"
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MuralSlim"
+                  next_token:
+                    type: string
+                    nullable: true
       security:
         - AwsIamAuthorizer: []
       x-amazon-apigateway-integration:
@@ -438,7 +541,7 @@ paths:
           Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaMuralCRUDArn}/invocations
         payloadFormatVersion: "2.0"
 
-  /murals/{muralId}/{artistNameEn}:
+  /murals/{mural_id}/{artist_name_en}:
     get:
       tags:
         - mural
@@ -446,14 +549,14 @@ paths:
       description: Returns a single mural
       operationId: getMuralByIdAndArtistName
       parameters:
-        - name: muralId
+        - name: mural_id
           in: path
           description: ID of the mural to return
           required: true
           schema:
             type: string
             format: uuid
-        - name: artistNameEn
+        - name: artist_name_en
           in: path
           description: name of the artist
           required: true
@@ -490,14 +593,14 @@ paths:
       tags:
         - mural
       parameters:
-        - name: muralId
+        - name: mural_id
           in: path
           description: ID of the mural to return
           required: true
           schema:
             type: string
             format: uuid
-        - name: artistNameEn
+        - name: artist_name_en
           in: path
           description: name of the artist
           required: true
@@ -537,14 +640,14 @@ paths:
       tags:
         - mural
       parameters:
-        - name: muralId
+        - name: mural_id
           in: path
           description: ID of the mural to return
           required: true
           schema:
             type: string
             format: uuid
-        - name: artistNameEn
+        - name: artist_name_en
           in: path
           description: name of the artist
           required: true
