@@ -5,6 +5,7 @@ import os
 from decimal import Decimal
 from http import HTTPStatus
 from urllib.parse import unquote
+import base64
 
 import boto3  # pylint: disable=import-error
 
@@ -78,13 +79,24 @@ def get_mural(mural_id, artist_name_en, murals_table):
     return HTTPStatus.OK, response["Item"]
 
 
-def get_all_murals(murals_table):
+def get_murals(murals_table, limit, exclusive_start_key):
     """Returns all murals"""
-    response = murals_table.scan(
-        ProjectionExpression="id,artist_name_en,geo_position,thumbnail,mural_status"
-    )
-    items = response.get("Items", [])
-    return HTTPStatus.OK, items
+    scan_args = {
+        "ProjectionExpression": "id,artist_name_en,geo_position,thumbnail,mural_status",
+        "Limit": limit
+    }
+    if exclusive_start_key:
+        scan_args["ExclusiveStartKey"] = exclusive_start_key
+
+    response = murals_table.scan(**scan_args)
+    last_evaluated_key = response.get("LastEvaluatedKey")
+    result = {
+        "items": response.get("Items", []),
+    }
+    if last_evaluated_key:
+        result["next_token"] = base64.urlsafe_b64encode(json.dumps(last_evaluated_key).encode()).decode()
+
+    return HTTPStatus.OK, result
 
 
 def lambda_handler(event, context):
@@ -121,7 +133,13 @@ def lambda_handler(event, context):
             mural_id = None
             artist_name_en = None
         if mural_id is None and artist_name_en is None:
-            response_code, response_body = get_all_murals(murals_table)
+            query_string_parameters = event.get("queryStringParameters") or {}
+            limit = int(query_string_parameters.get("limit", 200))
+            next_token = query_string_parameters.get("next_token", "")
+            exclusive_start_key = {}
+            if next_token:
+                exclusive_start_key = json.loads(base64.urlsafe_b64decode(next_token).decode())
+            response_code, response_body = get_murals(murals_table, limit, exclusive_start_key)
         else:
             response_code, response_body = get_mural(
                 mural_id, artist_name_en, murals_table

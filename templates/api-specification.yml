@@ -386,15 +386,37 @@ paths:
       operationId: getMurals
       tags:
         - mural
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 200
+          required: false
+          description: The number of items to return
+        - in: query
+          name: next_token
+          schema:
+            type: string
+          required: false
+          description: Pagination token
       responses:
         "200":
           description: An array of murals
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/MuralSlim"
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MuralSlim"
+                  next_token:
+                    type: string
+                    nullable: true
       security:
         - AwsIamAuthorizer: []
       x-amazon-apigateway-integration:
