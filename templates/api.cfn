@@ -88,6 +88,7 @@ Resources:
       cfn_nag:
         rules_to_suppress:
           - id: W84
+    Properties:
       LogGroupName: !Sub "/kyivmural/api-gateway/${Branch}/kyivmural-api-access-logs"
       RetentionInDays: 180
 
