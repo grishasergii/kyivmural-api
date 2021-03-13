@@ -219,7 +219,7 @@ paths:
                 "TableName": "${ArtistsTableName}",
                 "Key":{
                   "artist_name_en" : {
-                    "S": "$input.params('artist_name_en')"
+                    "S": "$util.urlDecode($input.params('artist_name_en'))"
                   }
                 }
               }
@@ -288,7 +288,7 @@ paths:
                 "ConditionExpression": "attribute_exists(artist_name_en)",
                 "Key": {
                   "artist_name_en" : {
-                    "S": "$input.params('artist_name_en')"
+                    "S": "$util.urlDecode($input.params('artist_name_en'))"
                   }
                 },
                 "Item":{
@@ -371,7 +371,7 @@ paths:
                 "ConditionExpression": "attribute_exists(artist_name_en)",
                 "Key": {
                   "artist_name_en" : {
-                    "S": "$input.params('artist_name_en')"
+                    "S": "$util.urlDecode($input.params('artist_name_en'))"
                   }
                 }
               }
@@ -453,7 +453,7 @@ paths:
                 "IndexName": "${MuralsTableArtistGlobalSecondaryIndexName}",
                 "KeyConditionExpression": "artist_name_en = :artist",
                 "ExpressionAttributeValues": {
-                  ":artist": {"S": "$input.params('artist_name_en')"}
+                  ":artist": {"S": "$util.urlDecode($input.params('artist_name_en'))"}
                 }
               }
         passthroughBehavior: when_no_templates
