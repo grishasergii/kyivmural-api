@@ -84,8 +84,12 @@ Resources:
 
   ApiGatewayAccessLogGroup:
     Type: AWS::Logs::LogGroup
-    Properties:
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: W84
       LogGroupName: !Sub "/kyivmural/api-gateway/${Branch}/kyivmural-api-access-logs"
+      RetentionInDays: 180
 
 Outputs:
   RestApiId:
