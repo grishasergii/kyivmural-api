@@ -1,11 +1,11 @@
 """Create, update and delete Mural lambda"""
+import base64
 import json
 import logging
 import os
 from decimal import Decimal
 from http import HTTPStatus
 from urllib.parse import unquote
-import base64
 
 import boto3  # pylint: disable=import-error
 
@@ -83,7 +83,7 @@ def get_murals(murals_table, limit, exclusive_start_key):
     """Returns all murals"""
     scan_args = {
         "ProjectionExpression": "id,artist_name_en,geo_position,thumbnail,mural_status",
-        "Limit": limit
+        "Limit": limit,
     }
     if exclusive_start_key:
         scan_args["ExclusiveStartKey"] = exclusive_start_key
@@ -94,7 +94,9 @@ def get_murals(murals_table, limit, exclusive_start_key):
         "items": response.get("Items", []),
     }
     if last_evaluated_key:
-        result["next_token"] = base64.urlsafe_b64encode(json.dumps(last_evaluated_key).encode()).decode()
+        result["next_token"] = base64.urlsafe_b64encode(
+            json.dumps(last_evaluated_key).encode()
+        ).decode()
 
     return HTTPStatus.OK, result
 
@@ -138,8 +140,12 @@ def lambda_handler(event, context):
             next_token = query_string_parameters.get("next_token", "")
             exclusive_start_key = {}
             if next_token:
-                exclusive_start_key = json.loads(base64.urlsafe_b64decode(next_token).decode())
-            response_code, response_body = get_murals(murals_table, limit, exclusive_start_key)
+                exclusive_start_key = json.loads(
+                    base64.urlsafe_b64decode(next_token).decode()
+                )
+            response_code, response_body = get_murals(
+                murals_table, limit, exclusive_start_key
+            )
         else:
             response_code, response_body = get_mural(
                 mural_id, artist_name_en, murals_table
