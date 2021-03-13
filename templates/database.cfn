@@ -41,18 +41,6 @@ Resources:
             ProjectionType: INCLUDE
             NonKeyAttributes:
               - thumbnail
-              - geoposition
-              - mural_status
-        - IndexName: artist_name_en-index-v3
-          KeySchema:
-            - AttributeName: artist_name_en
-              KeyType: HASH
-            - AttributeName: id
-              KeyType: RANGE
-          Projection:
-            ProjectionType: INCLUDE
-            NonKeyAttributes:
-              - thumbnail
               - geo_position
               - mural_status
       BillingMode: PAY_PER_REQUEST
@@ -73,7 +61,7 @@ Outputs:
   MuralsTableName:
     Value: !Ref MuralsTable
   MuralsTableArtistGlobalSecondaryIndexName:
-    Value: artist_name_en-index-v3
+    Value: artist_name_en-index-v2
   ArtistsTableName:
     Value: !Ref ArtistsTableV2
   ArtistsTableArn:
